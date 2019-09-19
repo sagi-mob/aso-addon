@@ -1,4 +1,4 @@
-function refreshApiData(country, date, os, sheetName, appId, startCol, endCol){
+function refreshApiData(country, date, sheetName, appId, startCol, endCol){
   if(country === '')
     throw Error("Please provide country code");
   var table = getData(country, date, appId, startCol, endCol);

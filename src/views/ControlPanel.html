@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <?!= include('header-imports'); ?>
+  <?!= include('main-css'); ?>
+  <base target="_top">
+</head>
+
+<body>
+  <div class="container">
+
+    <form class="form-group">
+      <fieldset>
+        <legend>OS:</legend>
+        <input class="" id='ios' type="radio" name="os" value='ios' checked="checked">
+        <label for="ios">iOS</label>
+        <input class="" id='android' type="radio" name="os" value='android'>
+        <label for="android">Android</label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Country Code:</legend>
+        <input class="form-control" type="text" name="country" placeholder="Type Country Code Here">
+      </fieldset>
+
+      <div class="horizontal-toggle">
+        <span class="checkbox-label">Manage Apps</span>
+        <span class="toggle-icon">
+          <input type="checkbox" id="ma-cbx" style="display:none" />
+          <label for="ma-cbx" class="toggle"><span></span></label>
+        </span>
+      </div>
+
+      <div class="manage-app-cont">
+        <fieldset>
+          <legend>Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="fetchApps()"></i> </legend>
+          <select id="chosenDocApp"></select>
+
+          <legend>Date:</legend>
+          <input class="form-control" type="date" name="date" id="date" />
+
+          <div class="block ma-buttons" id="button-bar">
+            <button class="btn btn-default" id="refreshAPIData">Refresh</button>
+            <button class="btn btn-default red-btn" id="delete-app">Delete App</button>
+            <button class="btn btn-default green-btn" id="add-to-tracker">Report sent</button>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="horizontal-toggle">
+        <span class="checkbox-label">Add App</span>
+        <span class="toggle-icon">
+          <input type="checkbox" id="aa-cbx" style="display:none" />
+          <label for="aa-cbx" class="toggle"><span></span></label>
+        </span>
+      </div>
+
+
+      <div class="add-app-cont">
+        <fieldset>
+          <legend>Select App:<i id="refresh-suggestions" class="fas fa-sync-alt" onclick="showAppsSuggestions()"></i>
+          </legend>
+          <select id="chosenMmpApp"></select>
+
+          <div class="block ma-buttons" id="button-bar">
+            <button class="btn btn-default" id="add-app">Add App</button>
+          </div>
+        </fieldset>
+      </div>
+
+
+
+      <h5 class="success" id="success"></h5>
+      <h5 class="error" id="error"></h5>
+    </form>
+  </div>
+</body>
+<?!= include('footer-imports'); ?>
+<script>
+  $(function () {
+    fetchApps();
+    $(".add-app-cont").hide();
+    $(".manage-app-cont").hide();
+    $('#refreshApps').click(fetchApps);
+    $('#refreshAPIData').click(refreshAPIData);
+    $('#add-to-tracker').click(addToTracker);
+    $('#delete-app').click(deleteApp);
+    $('input[type=radio]').click(osChanged);
+    $('refresh-suggestions').click(showAppsSuggestions);
+    $('#add-app').click(addApp);
+    $('#ma-cbx').click(function () {
+      $(".manage-app-cont").toggle("fast", "swing");
+    });
+    $('#aa-cbx').click(function () {
+      $(".add-app-cont").toggle("fast", "swing", showAppsSuggestions);
+    });
+  });
+</script>
+<?!= include('main-js'); ?>
+
+</html>

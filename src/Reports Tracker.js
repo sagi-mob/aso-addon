@@ -17,14 +17,7 @@ function addToTracker(appName, cCode, os, storeid) {
   return "Updated";
 }
 
-function getDate(){
-  var today = new Date();
-  var dd = String(today.getDate());
-  var mm = String(today.getMonth() + 1); //January is 0!
-  var yyyy = today.getFullYear();
-  
-  return [yyyy,mm,dd].join("-");
-}
+
 
 function getVersion(storeid, lang, os){
   var store = os === 'ios' ? 'appstore-appinfo-v2' : 'playstore-appinfo-v2';
