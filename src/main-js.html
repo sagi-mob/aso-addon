@@ -1,0 +1,134 @@
+<script>
+
+  //--------------- REFERSH AS OS Change ----------------//
+  function osChanged(){
+    fetchApps();
+    showAppsSuggestions();
+  }
+  
+  
+  //--------------- REFERSH APP API FUNCTIONS ----------------//
+  function refreshAPIData() {
+      var os = $('#chosenDocApp :selected').attr("os");
+      var name = $('#chosenDocApp :selected').attr("name");
+      var appId = $('#chosenDocApp :selected').val();
+      var country = $('input[name=country]').val();
+      var date = $('input[name=date]').val();
+      var sheetName = "API " + name + " " + os + " " + country;
+  
+      this.disabled = true;
+      google.script.run
+          .withSuccessHandler(printSuccess)
+          .withFailureHandler(printErr)
+          .withUserObject(this)
+          .refreshApiData(country, date, os, sheetName, appId, 1, 5);
+  }
+  
+  function fetchApps() {
+  var os = $('input[type=radio]:checked').val();
+      google.script.run.withSuccessHandler(buildDropdownList).docAppsByOs(os.toLowerCase());
+  }
+  
+  function buildDropdownList(apps) {
+      $("#chosenDocApp option").remove();
+      $.each(apps, function(key, obj) {
+          $("#chosenDocApp").append($("<option>")
+              .attr('value', obj["mmpid"])
+              .attr('os', obj["os"])
+              .attr('name', obj["name"])
+              .attr('storeid', obj["storeid"])
+              .text(obj["name"]));
+      });
+  
+  }
+  
+  //--------------- TRACK APP FUNCTIONS ----------------//
+  
+  function addToTracker() {
+      var os = $('#chosenDocApp :selected').attr("os");
+      var name = $('#chosenDocApp :selected').attr("name");
+      var storeid = $('#chosenDocApp :selected').attr("storeid");
+      var country = $('input[name=country]').val();
+  
+      this.disabled = true;
+      google.script.run
+          .withSuccessHandler(printSuccess)
+          .withFailureHandler(printErr)
+          .withUserObject(this)
+          .addToTracker(name, country, os, storeid);
+  }
+  
+  //--------------- DELETE APP FUNCTIONS ----------------//
+  
+  function deleteApp() {
+      var appId = $('#chosenDocApp :selected').val();
+      this.disabled = true;
+      google.script.run
+          .withSuccessHandler(function(msg, element) {
+              printSuccess(msg, element)
+              fetchApps();
+          })
+          .withFailureHandler(printErr)
+          .withUserObject(this)
+          .deleteAnApp(appId);
+  }
+  
+  //--------------- ADD APP FUNCTIONS ----------------//
+  function addApp() {
+    var country = $('input[name=country]').val();
+    var os = $('#chosenMmpApp :selected').attr('os');
+    var storeid = $('#chosenMmpApp :selected').attr('storeid');
+    var id = $('#chosenMmpApp :selected').val();
+    var name = $('#chosenMmpApp :selected').text();
+    var sheetName = "API " + name + " " + os + " " + country;
+    
+    this.disabled = true;
+    google.script.run
+    .withSuccessHandler(function(msg, el){
+      printSuccess(msg, el);
+      fetchApps();
+    })
+    .withFailureHandler(printErr)
+    .withUserObject(this)
+    .addAnApp(id, name, os, country, storeid);
+  }
+        
+  function showAppsSuggestions(){
+    var aaContVis = $('div.add-app-cont').css('display') != 'none';
+    if(!aaContVis) return ;
+    
+    google.script.run
+    .withSuccessHandler(function(appsList){
+      $("#chosenMmpApp option").remove();
+      var os = $('input[type=radio]:checked').val();
+      var apps = appsList[os];
+      
+      $.each(apps, function(key, obj) {
+      $("#chosenMmpApp").append($("<option>")
+      .attr('value', obj['mmpId'])
+      .attr('os', os)
+      .attr('name', obj['name'])
+      .attr('storeid', obj['storeid'])
+      .text(obj['name']));
+      });
+    })
+    .getAppsApiList();
+  }
+  
+  function printErr(err, element) {
+      element.disabled = false;
+      var errMsg = err || 'Something went wrong. Please check the add-on logs.';
+      $('#error').text(errMsg).show();
+      $('#error').delay(4000).fadeOut();
+      return false;
+  }
+  
+  function printSuccess(msg, element) {
+      element.disabled = false;
+      var sucMsg = msg || 'Done.';
+      $('#success').text(sucMsg).show("fast");
+      $('#success').delay(2000).fadeOut();
+      return false;
+  }
+</script>
+

@@ -1,0 +1,54 @@
+{
+  "name": "apps-script-starter",
+  "version": "3.9.1",
+  "description": "Setup a local development environment for Google Apps Script",
+  "author": {
+    "name": "Sagi Levi",
+    "email": "lesagi@gmail.com"
+  },
+  "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack",
+    "upload": "clasp push",
+    "deploy": "npm run build && npm run upload"
+  },
+  "keywords": [
+    "google-apps-script",
+    "gsuite",
+    "apps-script"
+  ],
+  "dependencies": {
+    "fsevents": "^2.0.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
+    "@babel/plugin-transform-member-expression-literals": "^7.2.0",
+    "@babel/plugin-transform-object-assign": "^7.2.0",
+    "@babel/plugin-transform-property-literals": "^7.2.0",
+    "babel-plugin-array-includes": "^2.0.3",
+    "@babel/preset-env": "^7.6.0",
+    "@google/clasp": "^2.2.1",
+    "@types/google-apps-script": "^0.0.59",
+    "babel-eslint": "^10.0.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-add-module-exports": "^1.0.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "eslint": "^6.3.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-loader": "^3.0.0",
+    "eslint-plugin-googleappsscript": "^1.0.3",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "gas-lib": "^2.0.3",
+    "gas-webpack-plugin": "^1.0.2",
+    "prettier": "^1.18.2",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
+  }
+}

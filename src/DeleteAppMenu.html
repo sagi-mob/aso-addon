@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--
+			<link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+			-->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+		<style>
+			.logo { vertical-align: middle; }
+			ul { list-style-type: none; padding: 0; }
+			h4 { margin: 0; }
+			legend {
+              background-color: #000;
+              color: #fff;
+              padding: 3px 6px;
+              margin-bottom: 3px;
+			}
+			.output {
+              font: 1rem 'Fira Sans', sans-serif;
+			}
+			fieldset, input {
+              margin-bottom: 12px;
+			}
+            form {margin-top: 6px;}
+            
+            .fas {
+              float: right;
+              padding-top: 6px;
+              cursor: pointer;
+            }
+            .fas:hover {
+              color: #bfed4b;
+            }
+            
+            #appsListStatusMsg { display: none; }
+            
+		</style>
+		<base target="_top">
+	</head>
+	<body>
+		<div class="container">
+        
+			<form class="form-group">
+                <fieldset>
+                
+                    <div>
+                      <legend>Select an App:<i id="refreshApps" class="fas fa-sync-alt" onclick="fetchApps()"></i> </legend> 
+                      <select id="chosenApp">
+                          
+                      </select>
+                      <h5 class="appsListStatusMsg" id="appsListStatusMsg">Done.</h5>
+                    </div>
+				</fieldset>
+                
+				<div class="block" id="button-bar">
+					<button class="btn btn-default" id="deleteApp">Delete</button>
+				</div>
+				<h5 class="error" id="error"></h5>
+			</form>
+		</div>
+	</body>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script>
+		$(function() {
+        fetchApps();
+          $('#refreshApps').click(fetchApps);
+		  $('#deleteApp').click(deleteApp);
+		});
+		
+		/**
+		 * Runs a server-side function to translate the text on all slides.
+		 */
+		function deleteApp() {
+          var appId = $('#chosenApp :selected').val();
+          
+		  this.disabled = true;
+		  $('#error').text('');
+		  google.script.run
+		      .withSuccessHandler(function(appId, element) {
+		        element.disabled = false;
+                $('#error').empty()
+                .append('App was deleted successfully');
+                $('#error').fadeIn().delay(2000).fadeOut();
+		        fetchApps();
+		        return false;
+		       })
+		      .withFailureHandler(function(msg, element) {
+		        element.disabled = false;
+		        $('#error').text('Something went wrong. Please check the add-on logs.');
+		        return false;
+		      })
+		      .withUserObject(this)
+		      .deleteAnApp(appId);
+		}
+        
+        function fetchApps() {
+          google.script.run.withSuccessHandler(buildDropdownList).returnDocApps();
+        }
+        
+        function buildDropdownList(apps) {
+          $("#chosenApp option").remove();
+          
+          $.each(apps, function(key, obj) {
+            $("#chosenApp").append($("<option>")
+            .attr('value', key)
+            .attr('os',obj["os"])
+            .attr('name', obj["name"])
+            .attr('storeid', obj["storeid"])
+            .text(obj["name"] + " - " + obj["os"]));
+          });
+          
+          $('#appsListStatusMsg').fadeIn().delay(1000).fadeOut();
+          
+          
+        }
+	</script>
+</html>
