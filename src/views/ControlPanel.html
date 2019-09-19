@@ -77,9 +77,10 @@
   </div>
 </body>
 <?!= include('footer-imports'); ?>
+<?!= include('main-js'); ?>
 <script>
   $(function () {
-    fetchApps();
+    // fetchApps();
     $(".add-app-cont").hide();
     $(".manage-app-cont").hide();
     $('#refreshApps').click(fetchApps);
@@ -97,6 +98,5 @@
     });
   });
 </script>
-<?!= include('main-js'); ?>
 
 </html>
