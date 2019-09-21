@@ -1,32 +1,32 @@
 <script>
-
   //--------------- REFERSH AS OS Change ----------------//
   function osChanged() {
-    fetchApps();
-    showAppsSuggestions();
+    GetDocumentApps();
+    GetMobileActionApps();
   }
 
 
   //--------------- REFERSH APP API FUNCTIONS ----------------//
-  function refreshAPIData() {
-    var os = $('#chosenDocApp :selected').attr("os");
-    var name = $('#chosenDocApp :selected').attr("name");
-    var appId = $('#chosenDocApp :selected').val();
+  function loadAppsKeywords() {
+    var mmpid = $('#chosenDocApp :selected').val();
     var country = $('input[name=country]').val();
     var date = $('input[name=date]').val();
-    var sheetName = "API " + name + " " + os + " " + country;
 
     this.disabled = true;
     google.script.run
       .withSuccessHandler(printSuccess)
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .refreshApiData(country, date, sheetName, appId, 1, 5);
+      .loadAppsKeywords(mmpid, country, date);
   }
 
-  function fetchApps() {
+  function GetDocumentApps() {
     var os = $('input[type=radio]:checked').val();
-    google.script.run.withSuccessHandler(buildDropdownList).docAppsByOs(os.toLowerCase());
+    google.script.run
+      .withSuccessHandler(apps => {
+        buildDropdownList(apps[os]);
+      })
+      .GetDocumentApps();
   }
 
   function buildDropdownList(apps) {
@@ -45,9 +45,7 @@
   //--------------- TRACK APP FUNCTIONS ----------------//
 
   function addToTracker() {
-    var os = $('#chosenDocApp :selected').attr("os");
-    var name = $('#chosenDocApp :selected').attr("name");
-    var storeid = $('#chosenDocApp :selected').attr("storeid");
+    var mmpid = $('#chosenDocApp :selected').val();
     var country = $('input[name=country]').val();
 
     this.disabled = true;
@@ -55,22 +53,22 @@
       .withSuccessHandler(printSuccess)
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .addToTracker(name, country, os, storeid);
+      .addToTracker(mmpid, country);
   }
 
   //--------------- DELETE APP FUNCTIONS ----------------//
 
   function deleteApp() {
-    var appId = $('#chosenDocApp :selected').val();
+    var mmpid = $('#chosenDocApp :selected').val();
     this.disabled = true;
     google.script.run
       .withSuccessHandler(function (msg, element) {
         printSuccess(msg, element)
-        fetchApps();
+        GetDocumentApps();
       })
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .deleteAnApp(appId);
+      .deleteApp(mmpid);
   }
 
   //--------------- ADD APP FUNCTIONS ----------------//
@@ -78,22 +76,21 @@
     var country = $('input[name=country]').val();
     var os = $('#chosenMmpApp :selected').attr('os');
     var storeid = $('#chosenMmpApp :selected').attr('storeid');
-    var id = $('#chosenMmpApp :selected').val();
+    var mmpid = $('#chosenMmpApp :selected').val();
     var name = $('#chosenMmpApp :selected').text();
-    var sheetName = "API " + name + " " + os + " " + country;
 
     this.disabled = true;
     google.script.run
       .withSuccessHandler(function (msg, el) {
         printSuccess(msg, el);
-        fetchApps();
+        GetDocumentApps();
       })
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .addAnApp(id, name, os, country, storeid);
+      .addApp(mmpid, name, os, country, storeid);
   }
 
-  function showAppsSuggestions() {
+  function GetMobileActionApps() {
     var aaContVis = $('div.add-app-cont').css('display') != 'none';
     if (!aaContVis) return;
 
@@ -105,14 +102,14 @@
 
         $.each(apps, function (key, obj) {
           $("#chosenMmpApp").append($("<option>")
-            .attr('value', obj['mmpId'])
+            .attr('value', obj['mmpid'])
             .attr('os', os)
             .attr('name', obj['name'])
             .attr('storeid', obj['storeid'])
             .text(obj['name']));
         });
       })
-      .getAppsApiList();
+      .GetMobileActionApps();
   }
 
   function printErr(err, element) {

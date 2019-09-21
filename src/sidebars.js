@@ -1,40 +1,26 @@
-const loadControlPanel = () => {
-  const template = HtmlService.createTemplateFromFile('ControlPanel');
-  // template.myVar = 'Sagi'; //Injecting variables to template
-  const sidebar = template
+const configureSidebar = (filename, title, width) => {
+  const sidebar = HtmlService.createTemplateFromFile(filename)
     .evaluate()
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(300)
-    .setTitle('Control Panel');
+    .setWidth(width || 300)
+    .setTitle(title);
   SpreadsheetApp.getUi().showSidebar(sidebar);
 };
 
-const loadMultiplySidebar = () => {
-  const sidebar = HtmlService.createTemplateFromFile('multiplySidebar')
-    .evaluate()
-    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(1000)
-    .setTitle('Insert Formulas');
+const showControlPanel = () => configureSidebar('ControlPanel', 'Control Panel');
+const showMultiplySidebar = () => configureSidebar('multiplySidebar', 'Multiplications');
+const showHightlightSidebar = () => configureSidebar('highlightSidebar', 'Highlighter');
+const showKeysCounterSidebar = () => configureSidebar('keyCounterSidebar', 'Keywords Counter');
 
-  SpreadsheetApp.getUi().showSidebar(sidebar);
-};
+export { showControlPanel, showMultiplySidebar, showHightlightSidebar, showKeysCounterSidebar };
 
-const loadHightlightSidebar = () => {
-  const sidebar = HtmlService.createTemplateFromFile('highlightSidebar')
-    .evaluate()
-    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(1000)
-    .setTitle('Insert Ranges');
-  SpreadsheetApp.getUi().showSidebar(sidebar);
-};
-
-const loadKeysCounterSidebar = () => {
-  const sidebar = HtmlService.createTemplateFromFile('keyCounterSidebar')
-    .evaluate()
-    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(1000)
-    .setTitle('Insert Ranges');
-  SpreadsheetApp.getUi().showSidebar(sidebar);
-};
-
-export { loadControlPanel, loadHightlightSidebar, loadKeysCounterSidebar, loadMultiplySidebar };
+// { //T HERE IS AN OPTION TO PASS VARIABLE TO THE TEMPLATE
+//   const template = HtmlService.createTemplateFromFile('ControlPanel');
+//   // template.myVar = 'Sagi'; // <--- This is how
+//   const sidebar = template
+//     .evaluate()
+//     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+//     .setWidth(300)
+//     .setTitle('Control Panel');
+//   SpreadsheetApp.getUi().showSidebar(sidebar);
+// }

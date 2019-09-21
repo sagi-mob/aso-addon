@@ -1,28 +1,25 @@
-import * as PropService from './PropService'
+import * as PropService from './services/PropService';
+import loadAppsKeywords from './services/KeywordsService';
+import { getDate } from './services/DateService';
 
-function addApp(id, name, os, country, storeid){
-  const activeSs = SpreadsheetApp.getActive();
-  const isAppExists = (PropService.getOne(id+"@id") != null)
-  const sheetName = "API " + name + " " + os + " " + country.toUpperCase();
-  
-  
-  if(!id || !name || !os || !country){
-    throw Error("Please provide country code.");}
-  
-  const table = getData(country, "", id, 1, 5);
-  if(activeSs.getSheetByName(sheetName) == null){
-    activeSs.insertSheet(sheetName);
+const addApp = (mmpid, name, os, country, storeid, nickname) => {
+  const isAppExists = PropService.getProp(`${mmpid}@storeid"`) !== null;
+
+  if (!mmpid || !name || !os || !country) {
+    throw Error('Please provide country code.');
   }
-  updateSheetWithContent(table, sheetName);
-  
-  
-  if(!isAppExists){
-    setOneProp(id+"@id", name);
-    setOneProp(id+"@os", os);
-    setOneProp(id+"@storeid", storeid);
+  if (!isAppExists) {
+    const setField = PropService.SetAppFieldCtor(mmpid);
+    setField('os', os);
+    setField('storeid', storeid);
+    setField('mmpid', mmpid);
+    setField('name', name);
+    setField('nickname', nickname || '');
   }
-  
-  return "App was added successfully.";
-}
+
+  loadAppsKeywords(mmpid, country, getDate());
+
+  return 'App was added successfully.';
+};
 
 export default addApp;

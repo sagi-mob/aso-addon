@@ -3,12 +3,12 @@ const onOpen = () => {
   const menu = ui.createAddonMenu();
   menu.addItem('Install', 'onInstall').addSeparator();
   menu
-    .addItem('Control Panel', 'loadControlPanel')
+    .addItem('Control Panel', 'showControlPanel')
     .addSeparator()
-    .addItem('Keywords Multiplication', 'loadMultiplySidebar')
+    .addItem('Keywords Multiplication', 'showMultiplySidebar')
     .addSeparator()
-    .addItem('Highlight Keywords', 'loadHightlightSidebar')
-    .addItem('Description Keywords Counter', 'loadKeysCounterSidebar');
+    .addItem('Highlight Keywords', 'showHightlightSidebar')
+    .addItem('Description Keywords Counter', 'showKeysCounterSidebar');
 
   menu.addToUi();
 };

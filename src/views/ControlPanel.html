@@ -34,14 +34,14 @@
 
       <div class="manage-app-cont">
         <fieldset>
-          <legend>Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="fetchApps()"></i> </legend>
+          <legend>Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="GetDocumentApps()"></i> </legend>
           <select id="chosenDocApp"></select>
 
           <legend>Date:</legend>
           <input class="form-control" type="date" name="date" id="date" />
 
           <div class="block ma-buttons" id="button-bar">
-            <button class="btn btn-default" id="refreshAPIData">Refresh</button>
+            <button class="btn btn-default" id="loadAppsKeywords">Refresh</button>
             <button class="btn btn-default red-btn" id="delete-app">Delete App</button>
             <button class="btn btn-default green-btn" id="add-to-tracker">Report sent</button>
           </div>
@@ -59,7 +59,7 @@
 
       <div class="add-app-cont">
         <fieldset>
-          <legend>Select App:<i id="refresh-suggestions" class="fas fa-sync-alt" onclick="showAppsSuggestions()"></i>
+          <legend>Select App:<i id="refresh-suggestions" class="fas fa-sync-alt" onclick="GetMobileActionApps()"></i>
           </legend>
           <select id="chosenMmpApp"></select>
 
@@ -80,21 +80,22 @@
 <?!= include('main-js'); ?>
 <script>
   $(function () {
-    // fetchApps();
+    GetDocumentApps();
     $(".add-app-cont").hide();
     $(".manage-app-cont").hide();
-    $('#refreshApps').click(fetchApps);
-    $('#refreshAPIData').click(refreshAPIData);
-    $('#add-to-tracker').click(addToTracker);
+    $('#refreshApps').click(GetDocumentApps);
     $('#delete-app').click(deleteApp);
+    $('#loadAppsKeywords').click(loadAppsKeywords);
+    $('#add-to-tracker').click(addToTracker);
+
     $('input[type=radio]').click(osChanged);
-    $('refresh-suggestions').click(showAppsSuggestions);
+    $('refresh-suggestions').click(GetMobileActionApps);
     $('#add-app').click(addApp);
     $('#ma-cbx').click(function () {
       $(".manage-app-cont").toggle("fast", "swing");
     });
     $('#aa-cbx').click(function () {
-      $(".add-app-cont").toggle("fast", "swing", showAppsSuggestions);
+      $(".add-app-cont").toggle("fast", "swing", GetMobileActionApps);
     });
   });
 </script>
