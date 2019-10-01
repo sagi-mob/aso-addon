@@ -4,8 +4,7 @@
 {
   ...
   "oauthScopes": [
-    "https://www.googleapis.com/auth/spreadsheets.readonly",
-    "https://www.googleapis.com/auth/youtube.upload"
+    "https://www.googleapis.com/auth/spreadsheets.readonly"
   ],
   ...
 }

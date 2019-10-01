@@ -11,6 +11,7 @@
   "scripts": {
     "build": "webpack",
     "upload": "clasp push",
+    "ramda-custom": "npm run --silent partial-build reduce forEach flatten > dist/ramda.custom.js",
     "deploy": "npm run build && npm run upload"
   },
   "keywords": [
@@ -19,7 +20,8 @@
     "apps-script"
   ],
   "dependencies": {
-    "fsevents": "^2.0.7"
+    "fsevents": "^2.0.7",
+    "ramda": "^0.26.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",

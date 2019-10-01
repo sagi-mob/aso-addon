@@ -6,6 +6,7 @@ import addApp from './add-app';
 import { deleteApp } from './delete-app';
 import loadAppsKeywords from './services/KeywordsService';
 import addToTracker from './report-tracker';
+import highlighter from './highlighter';
 
 global.showControlPanel = Sidebars.showControlPanel;
 global.showHightlightSidebar = Sidebars.showHightlightSidebar;
@@ -23,3 +24,4 @@ global.addApp = addApp;
 global.deleteApp = deleteApp;
 global.loadAppsKeywords = loadAppsKeywords;
 global.addToTracker = addToTracker;
+global.highlighter = highlighter;

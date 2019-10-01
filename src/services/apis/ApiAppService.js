@@ -12,7 +12,6 @@ const AppDetail = (mmpid, lang) => {
 
   const store = os === 'ios' ? 'appstore-appinfo-v2' : 'playstore-appinfo-v2';
   const url = `${base}/${store}/versions/${[storeid, lang].join('/')}/?token=${apiKey}`;
-
   try {
     return JSON.parse(ApiRequest(url));
   } catch (e) {

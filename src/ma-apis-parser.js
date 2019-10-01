@@ -23,7 +23,7 @@ const AppsListParser = data => {
     const os = storeIdToOs(storeid);
     res[os].push({
       storeid,
-      name: data[storeid].appName,
+      name: data[storeid].appName ? data[storeid].appName : storeid,
       mmpid: data[storeid].appId,
       os
     });
