@@ -1,6 +1,6 @@
 import { AppDetail } from './services/ApiService';
 import { getAppFieldCtor } from './services/PropService';
-import { getDate } from './services/DateService';
+import { getDateStr } from './services/DateService';
 
 function getLang(cCode, os) {
   if (os === 'android') {
@@ -35,7 +35,7 @@ function addToTracker(mmpid, cCode) {
         cCode,
         os,
         thisId,
-        getDate(),
+        getDateStr(),
         version,
         activeUser
       ]

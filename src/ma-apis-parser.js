@@ -1,5 +1,5 @@
 import sortByAppName from './sortings';
-// import { getDate } from './services/DateService';
+import { getDateStr } from './services/DateService';
 
 const storeIdToOs = storeId => (new RegExp(/(?:(\D))/i).test(storeId) ? 'android' : 'ios');
 
@@ -38,7 +38,7 @@ const AppsListParser = data => {
 // Mind that the headers shouldn't be sorted - therefore to be added after sorting
 const KeywordsListParser = (data, date) => {
   const headers = Object.keys(data[0]);
-  headers.splice(4, 1, date);
+  headers.splice(4, 1, getDateStr(date));
   const res = [headers];
   data.forEach(entry => {
     res.push([

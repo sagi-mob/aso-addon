@@ -48,7 +48,7 @@ const getApiKeywordsList = (ss, mmpid, cCode) => {
   );
   const keywordsApiObj = keywordsApiTable.slice(1).map(curr => zipObj(headers, curr));
   return keywordsApiObj;
-}
+};
 
 const createRecommendations = (mmpid, cCode, textRanges) => {
   const ss = SpreadsheetApp.getActive();
@@ -56,7 +56,8 @@ const createRecommendations = (mmpid, cCode, textRanges) => {
 
   const wordsList = getWordsList(ss, sheet, textRanges);
   const apiKeywordsList = getApiKeywordsList(ss, mmpid, cCode);
-
+  Logger.log(`${wordsList} ${apiKeywordsList}`);
+  return 'Done.';
 };
 
 export default createRecommendations;

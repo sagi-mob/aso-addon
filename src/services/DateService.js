@@ -1,5 +1,6 @@
-const getDate = today => {
-  const date = today || new Date();
+const getDateStr = today => {
+  if (today) return today;
+  const date = new Date();
   const dd = String(date.getDate());
   const mm = String(date.getMonth() + 1); // January is 0!
   const yyyy = date.getFullYear();
@@ -22,4 +23,4 @@ const getCurrMonth = () =>
     'December'
   ].indexOf(new Date().getMonth());
 
-export { getDate, getCurrMonth };
+export { getDateStr, getCurrMonth };

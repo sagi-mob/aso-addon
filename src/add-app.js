@@ -1,6 +1,6 @@
 import * as PropService from './services/PropService';
 import loadAppsKeywords from './services/KeywordsService';
-import { getDate } from './services/DateService';
+import { getDateStr } from './services/DateService';
 
 const addApp = (mmpid, name, os, country, storeid, nickname) => {
   const isAppExists = PropService.getProp(`${mmpid}@storeid"`) !== null;
@@ -17,7 +17,7 @@ const addApp = (mmpid, name, os, country, storeid, nickname) => {
     setField('nickname', nickname || '');
   }
 
-  loadAppsKeywords(mmpid, country, getDate());
+  loadAppsKeywords(mmpid, country, getDateStr());
 
   return 'App was added successfully.';
 };

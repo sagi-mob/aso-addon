@@ -1,3 +1,5 @@
+import { getDateStr } from '../DateService';
+
 const apiKey = '569512200f09f200010000124d9c738b39f94bfe6c86c9baa313ca28';
 const base = 'https://api.mobileaction.co';
 const errMsg = 'Api request failed';
@@ -14,7 +16,8 @@ const DashboardApps = () => {
 };
 
 const DailyKeywordsRanking = (appId, countryCode, date) => {
-  const url = `${base}/keywords/${appId}/${countryCode}?token=${apiKey}&date=${date}`;
+  const url = `${base}/keywords/${appId}/${countryCode}?token=${apiKey}&date=${getDateStr(date)}`;
+
   try {
     const res = JSON.parse(ApiRequest(url));
     if (res.success) {
