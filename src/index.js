@@ -7,8 +7,12 @@ import { deleteApp } from './delete-app';
 import loadAppsKeywords from './services/KeywordsService';
 import addToTracker from './report-tracker';
 import highlighter from './highlighter';
+<<<<<<< HEAD
 import wordCounter from './keysDescriptionCounter';
 import multiplication from './multiplication';
+=======
+import createRecommendations from './rec-table-gen';
+>>>>>>> 912cc7bc7d3de0e6f0d6bbb83bac88cd151cc5af
 
 global.showControlPanel = Sidebars.showControlPanel;
 global.showHightlightSidebar = Sidebars.showHightlightSidebar;
@@ -27,5 +31,9 @@ global.deleteApp = deleteApp;
 global.loadAppsKeywords = loadAppsKeywords;
 global.addToTracker = addToTracker;
 global.highlighter = highlighter;
+<<<<<<< HEAD
 global.multiplication = multiplication;
 global.wordCounter = wordCounter;
+=======
+global.createRecommendations = createRecommendations;
+>>>>>>> 912cc7bc7d3de0e6f0d6bbb83bac88cd151cc5af
