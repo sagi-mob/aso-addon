@@ -1,186 +1,189 @@
-function getFilename(){
-  var spname = SpreadsheetApp.getActive().getName();
- return spname.substring(0, spname.search(/\W/g));
+import { reduce } from 'ramda';
+import { ascendArrLen, descdArrLen } from './sortings';
+
+function getFilename() {
+  const spname = SpreadsheetApp.getActive().getName();
+  return spname.substring(0, spname.search(/\W/g));
 }
 
-function multiplication(mults, toFile, toSheet){
-  var ss = SpreadsheetApp.getActive();
-  mults = parseMults(mults);
-  var keywords = getKeywords(ss);
-  var hash = multiply(mults, keywords);
-  var headers = mults.map(function(curr){ 
-    return curr.join("*").toLowerCase(); 
-  }).sort();
-  
-  if(toSheet) { multToSheet(ss, hash, mults.length, headers); };
-  if(toFile) { return multToFile(hash, headers); };
-  
-}
-
-
-function multToFile(hash, headers){
-  var flattened = headers.reduce(function(acc, curr){
-    return acc.concat(hash[curr]);
-  },[]);
-  
-  var arr = flattened.filter(function(curr, i){
-    return flattened.indexOf(curr) === i;
-  });
-  
-  return { 'name': getFilename(),
-          'text': arr.join('\n')};
-}
-
-function multToSheet(ss, hash, numOfCols, headers){
-  setSheets(ss);
-  var sheet = ss.getSheetByName("Multiplications");
-  
-  var longestArr = 0;
-  for(var key in hash){
-    longestArr = hash[key].length > longestArr ? hash[key].length : longestArr;
+function zipArray(arr1, arr2) {
+  if (arr1.length === 0 && arr2.length !== 0) return arr2;
+  if (arr1.length !== 0 && arr2.length === 0) return arr1;
+  const zipped = [];
+  for (let i = 0; i < arr1.length; i += 1) {
+    for (let j = 0; j < arr2.length; j += 1) {
+      zipped.push(`${arr1[i]} ${arr2[j]}`);
+    }
   }
-  
-  var res = arrangeResult(longestArr, headers, hash);
-  sheet.clear();
-  var sheet = ss.getSheetByName("Multiplications");
-  var lastCol = sheet.getLastColumn();
-  sheet.getRange(1, 1, longestArr+1, numOfCols).setValues(res);
-  sheet.createTextFinder("undefined").replaceAllWith("");
+  return zipped;
 }
 
-function arrangeResult(longestArr, headers, hash){
-  var table = [headers.map(function(curr){ return curr.toUpperCase() })];
-  for(var i=0; i<longestArr; i++){
-    var row = [];
-    for(var el=0; el<headers.length; el++){
-      var key = headers[el].toLowerCase();
-      row.push(hash[key][i] == "undefined" ? new String() : hash[key][i]);
+function specialZip(twoDimArr) {
+  if (twoDimArr.length === 0) return [];
+  if (twoDimArr.length === 1) return twoDimArr[0];
+  if (twoDimArr.length === 2) return zipArray(twoDimArr[0], twoDimArr[1]);
+  return zipArray(
+    specialZip(twoDimArr.slice(0, twoDimArr.length / 2)),
+    specialZip(twoDimArr.slice(twoDimArr.length / 2))
+  );
+}
+
+function setSheets(ss) {
+  const keysSheet = ss.getSheetByName('Words');
+  if (keysSheet == null) throw Error('No Keywords Sheet to generate multiplications');
+
+  const multSheet = ss.getSheetByName('Multiplications');
+  if (multSheet == null) ss.insertSheet('Multiplications');
+}
+
+function arrangeResult(longestArr, headers, hash) {
+  const table = [
+    headers.map(function(curr) {
+      return curr.toUpperCase();
+    })
+  ];
+  for (let i = 0; i < longestArr; i += 1) {
+    const row = [];
+    for (let el = 0; el < headers.length; el += 1) {
+      const key = headers[el].toLowerCase();
+      row.push(hash[key][i] === 'undefined' ? `` : hash[key][i]);
     }
     table.push(row);
   }
   return table;
 }
 
-function incLength(a, b){
-    return a.length-b.length;
+function multToSheet(ss, hash, numOfCols, headers) {
+  setSheets(ss);
+  const sheet = ss.getSheetByName('Multiplications');
+
+  const longestArr = reduce(
+    (acc, key) => Math.max(hash[key] ? hash[key].length : 0, acc),
+    0,
+    Object.keys(hash)
+  );
+
+  const res = arrangeResult(longestArr, headers, hash);
+  sheet.clear();
+  sheet.getRange(1, 1, longestArr + 1, numOfCols).setValues(res);
+  sheet.createTextFinder('undefined').replaceAllWith('');
 }
 
-function decsLength(a, b){
-    return b.length-a.length;
+function parseMults(mults) {
+  const res = [];
+  mults.forEach(function(curr) {
+    if (curr !== '') {
+      const newVal = curr.toLowerCase().split('*');
+      res.push(newVal);
+    }
+  });
+  return res.sort(ascendArrLen);
 }
 
-function setSheets(ss){
-  var keysSheet = ss.getSheetByName("Words");
-  if(keysSheet == null)
-    throw Error('No Keywords Sheet to generate multiplications');
-  
-  var multSheet = ss.getSheetByName("Multiplications");
-  if(multSheet == null)
-    ss.insertSheet("Multiplications");
+function multToFile(hash, headers) {
+  const flattened = headers.reduce(function(acc, curr) {
+    return acc.concat(hash[curr]);
+  }, []);
+
+  const arr = flattened.filter(function(curr, i) {
+    return flattened.indexOf(curr) === i;
+  });
+
+  return { name: getFilename(), text: arr.join('\n') };
 }
 
-function multiply(mults, keywords){
-  var hash = hashInit(keywords);
-  mults.forEach(function(mult){
-    var str = mult.join("*");
-    var hashKeys = Object.keys(hash).sort(decsLength);
-    var arr = optimizeLists(str, hashKeys, this, []);
-    var zipped = specialZip(arr);
+function hashInit(keywords) {
+  const hash = {};
+  for (let i = 0; i < keywords.length; i += 1) {
+    hash[String.fromCharCode(i + 97)] = keywords[i];
+  }
+  return hash;
+}
+
+function optimizeLists(str, hashKeys, hash) {
+  //  Logger.log("Hash: " + Object.keys(hash));
+  //  Logger.log("Formula: " + str);
+  let arr = new Array(str.replace(/\*/g, '').length);
+  let updatedStr = str;
+  for (let i = 0; i < hashKeys.length && updatedStr.match(/\w/g) !== null; i += 1) {
+    const ind = updatedStr.indexOf(hashKeys[i]);
+    //    Logger.log(ind);
+    if (ind !== -1) {
+      const astInHash = hashKeys[i].match(/\*/g);
+      const numOfCellsToRemove =
+        astInHash != null ? hashKeys[i].length - astInHash.length : hashKeys[i].length;
+      const numOfAstToInd =
+        updatedStr.substring(0, ind).match(/\*/g) != null
+          ? updatedStr.substring(0, ind).match(/\*/g).length
+          : 0;
+      const from = ind - numOfAstToInd;
+      const to = from + numOfCellsToRemove;
+      const toConcat = hash[hashKeys[i]] === null ? [] : hash[hashKeys[i]];
+      arr = arr
+        .slice(0, from)
+        .concat([toConcat])
+        .concat(arr.slice(to));
+      const escapeAstrix = hashKeys[i].replace(/\*/g, '\\*');
+      const regex = new RegExp(`(${escapeAstrix})`);
+      updatedStr = updatedStr.replace(regex, '@');
+      //      Logger.log("Formula: " + str);
+    }
+  }
+  return arr;
+}
+
+function multiply(mults, keywords) {
+  const hash = hashInit(keywords);
+  mults.forEach(function(mult) {
+    const str = mult.join('*');
+    const hashKeys = Object.keys(hash).sort(descdArrLen);
+    const arr = optimizeLists(str, hashKeys, this);
+    const zipped = specialZip(arr);
     this[str] = zipped;
-    //assume no repetitions of formulas (only one occurence for each formula)
-    
+    // assume no repetitions of formulas (only one occurence for each formula)
   }, hash);
   return hash;
 }
 
-function fromRowToCol(row){
-  var arr = [];
-  row.forEach(function(curr){
-    this.push([curr]);
-  }, arr);
-  return arr;
-}
-function optimizeLists(str, hashKeys, hash, optimizedArray){
-//  Logger.log("Hash: " + Object.keys(hash));
-//  Logger.log("Formula: " + str);
-  var arr = new Array(str.replace(/\*/g,"").length);
-  for(var i=0; i<hashKeys.length && str.match(/\w/g) != null; i++){
-    var ind = str.indexOf(hashKeys[i]);
-//    Logger.log(ind);
-    if(ind != -1){
-      var ind = str.indexOf(hashKeys[i]); //for now it doesn't support formulas that conatin words
-      var astInHash = hashKeys[i].match(/\*/g);
-      var numOfCellsToRemove = astInHash != null ? hashKeys[i].length - astInHash.length : hashKeys[i].length;
-      var numOfAstToInd = str.substring(0,ind).match(/\*/g) != null ? str.substring(0,ind).match(/\*/g).length : 0;
-      var from = ind - numOfAstToInd;
-      var to = from + numOfCellsToRemove;
-      var toConcat = hash[hashKeys[i]] === null ? [] : hash[hashKeys[i]];
-      arr = arr.slice(0,from).concat([toConcat]).concat(arr.slice(to));
-      var escapeAstrix = hashKeys[i].replace(/\*/g, "\\*");
-      var regex = new RegExp('('+escapeAstrix+')');
-      str = str.replace(regex,"@");
-//      Logger.log("Formula: " + str);
+function getKeywords(ss) {
+  //  var ss = SpreadsheetApp.getActive();
+  const sheet = ss.getActiveSheet();
+  //  var sheet= ss.getSheetByName("Words");
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  const wordsArr = sheet.getSheetValues(1, 1, lastRow, lastCol);
+  const cols = [];
+  for (let col = 0; col < lastCol; col += 1) {
+    const nextCol = [];
+    for (let row = 1; row < lastRow; row += 1) {
+      if (wordsArr[row][col] !== '') nextCol.push(wordsArr[row][col]);
     }
-  }
-  return arr;
-}
-
-
-function hashInit(keywords){
-  var hash = new Object();
-  for(var i=0; i<keywords.length; i++){
-    hash[String.fromCharCode(i+97)] = keywords[i];
-  }
-  return hash;
-}
-
-function zipArray(arr1, arr2){
-  if(arr1.length === 0 && arr2.length != 0) return arr2;
-  else if(arr1.length != 0 && arr2.length === 0) return arr1;
-  var zipped = [];
-  for(var i=0; i<arr1.length; i++){
-    for(var j=0; j<arr2.length; j++){
-      zipped.push(arr1[i] + " " + arr2[j]);
-    }
-  }
-  return zipped;
-}
-
-function specialZip(twoDimArr){
-  if(twoDimArr.length === 0) return [];
-  else if(twoDimArr.length === 1) return twoDimArr[0];
-  else if(twoDimArr.length === 2) return zipArray(twoDimArr[0], twoDimArr[1]);
-  else return zipArray(specialZip(twoDimArr.slice(0, twoDimArr.length/2)),
-                       specialZip(twoDimArr.slice(twoDimArr.length/2)));
-}
-
-function parseMults(mults){
-  var res = [];
-  mults.forEach(function(curr){
-    if(!curr==""){
-      var newVal = curr.toLowerCase().split("*");
-      res.push(newVal);
-    }
-  });
-  return res.sort(incLength);
-}
-
-function getKeywords(ss){
-//  var ss = SpreadsheetApp.getActive();
-  var sheet = ss.getActiveSheet();
-//  var sheet= ss.getSheetByName("Words");
-  var lastRow = sheet.getLastRow();
-  var lastCol = sheet.getLastColumn();
-  var wordsArr = sheet.getSheetValues(1, 1, lastRow, lastCol);
-  var cols = [];
-  for(var col=0; col<lastCol; col++){
-    var nextCol = [];
-    for(var row=1; row<lastRow; row++){
-      if(wordsArr[row][col] != "")
-        nextCol.push(wordsArr[row][col])
-        }
     cols.push(nextCol);
   }
   return cols;
 }
 
+const multiplication = (mults, toFile, toSheet) => {
+  const ss = SpreadsheetApp.getActive();
+  const parsedMults = parseMults(mults);
+  const keywords = getKeywords(ss);
+  const hash = multiply(parsedMults, keywords);
+  const headers = parsedMults
+    .map(function(curr) {
+      return curr.join('*').toLowerCase();
+    })
+    .sort();
+
+  Logger.log('got this far');
+  if (toSheet) {
+    multToSheet(ss, hash, parsedMults.length, headers);
+  }
+  Logger.log('then here');
+  if (toFile) {
+    return multToFile(hash, headers);
+  }
+
+  return 'Done that.';
+};
+
+export default multiplication;

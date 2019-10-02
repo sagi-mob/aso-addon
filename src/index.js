@@ -8,6 +8,7 @@ import loadAppsKeywords from './services/KeywordsService';
 import addToTracker from './report-tracker';
 import highlighter from './highlighter';
 import wordCounter from './keysDescriptionCounter';
+import multiplication from './multiplication';
 
 global.showControlPanel = Sidebars.showControlPanel;
 global.showHightlightSidebar = Sidebars.showHightlightSidebar;
@@ -26,5 +27,5 @@ global.deleteApp = deleteApp;
 global.loadAppsKeywords = loadAppsKeywords;
 global.addToTracker = addToTracker;
 global.highlighter = highlighter;
-
+global.multiplication = multiplication;
 global.wordCounter = wordCounter;
