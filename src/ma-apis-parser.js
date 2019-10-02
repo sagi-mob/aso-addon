@@ -34,6 +34,8 @@ const AppsListParser = data => {
   };
 };
 
+// TODO: I want to sort the list alphabetically
+// Mind that the headers shouldn't be sorted - therefore to be added after sorting
 const KeywordsListParser = (data, date) => {
   const headers = Object.keys(data[0]);
   headers.splice(4, 1, date);

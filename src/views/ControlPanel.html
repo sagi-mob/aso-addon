@@ -69,7 +69,7 @@
         </fieldset>
       </div>
 
-
+      <?!= include('rec-table-view'); ?>
 
       <h5 class="success" id="success"></h5>
       <h5 class="error" id="error"></h5>
@@ -78,6 +78,7 @@
 </body>
 <?!= include('footer-imports'); ?>
 <?!= include('main-js'); ?>
+<?!= include ('rec-table-js'); ?>
 <script>
   $(function () {
     GetDocumentApps();

@@ -1,0 +1,19 @@
+<script>
+
+  $('#rec-table-btn').click(createRecommendations);
+  function createRecommendations() {
+    var ranges = $("#rec-table-ranges").val();
+    var mmpid = $('#chosenDocApp :selected').val();
+    var country = $('input[name=country]').val();
+    google.script.run
+      .withSuccessHandler(function (res, el) {
+        console.log(res);
+        printSuccess(res, el);
+
+      })
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .createRecommendations(mmpid, country, ranges);
+  }
+
+</script>

@@ -63,9 +63,8 @@ function SUMIFREGEX(cell, searchCol, sumCol, criterion) {
 }
 
 /**
-* For each cell in {searchCol} that contains the cell content, it adds
-* the correspond value from the same row in {sumCol}
-* {criterion} is optional if want to add a condition the the {sumCol} value also need to fullfill.
+* For each cell in {keysRange} that contains the cell content, it adds
+* the correspond value from the same row in {scoreRange}
 * @param {cell} input a cell.
 * @param {keysRange} input The column to check and iterate over.
 * @param {scoreRange} input The correspond column from which we add to sum.
