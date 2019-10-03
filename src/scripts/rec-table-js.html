@@ -5,8 +5,11 @@
     var ranges = $("#rec-table-ranges").val();
     var mmpid = $('#chosenDocApp :selected').val();
     var country = $('input[name=country]').val();
+    this.disabled = true;
+    $('#loading-indicator').show();
     google.script.run
       .withSuccessHandler(function (res, el) {
+        $('#loading-indicator').hide();
         console.log(res);
         printSuccess(res, el);
 
@@ -15,5 +18,18 @@
       .withUserObject(this)
       .createRecommendations(mmpid, country, ranges);
   }
+
+  $('#add-filter-btn').click(addFilter);
+  function addFilter() {
+    var filtersLen = $('#filters').children().length;
+    $('#loading-indicator').toggle();
+    $('#filters').append(
+      $('<input type="text">')
+        .attr('class', 'form-control')
+        .attr('id', filtersLen)
+    );
+    ;
+  }
+
 
 </script>
