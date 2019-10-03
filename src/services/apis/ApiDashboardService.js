@@ -15,13 +15,13 @@ const DashboardApps = () => {
   }
 };
 
-const DailyKeywordsRanking = (appId, countryCode, date) => {
-  const url = `${base}/keywords/${appId}/${countryCode}?token=${apiKey}&date=${getDateStr(date)}`;
+const DailyKeywordsRanking = (mmpid, countryCode, date) => {
+  const url = `${base}/keywords/${mmpid}/${countryCode}?token=${apiKey}&date=${getDateStr(date)}`;
 
   try {
     const res = JSON.parse(ApiRequest(url));
     if (res.success) {
-      return res.data;
+      return res.data.sort((a, b) => a.keyword.localeCompare(b.keyword));
     }
     throw Error('Api response failed');
   } catch (e) {

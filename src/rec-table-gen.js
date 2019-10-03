@@ -1,12 +1,20 @@
-import { flatten, reduce, zipObj } from 'ramda';
-import { getAppFieldCtor } from './services/PropService';
+import { flatten, reduce, findIndex } from 'ramda';
+// import { getAppFieldCtor } from './services/PropService';
+import { DailyKeywordsRanking } from './services/ApiService';
 
 const refactorArr = cellsTextArr =>
   reduce(
-    (acc, curr) =>
-      curr.indexOf(',') !== -1
-        ? acc.concat(curr.toLowerCase().split(new RegExp(/\W+/gm)))
-        : acc.concat(curr.trim().toLowerCase()),
+    (acc, curr) => {
+      const currLower = curr.toLowerCase().trim();
+      if (curr.indexOf(',') !== -1) {
+        return acc.concat(currLower.split(new RegExp(/\W+/gm)));
+      }
+      if (curr.indexOf(' ') !== -1) {
+        // return acc.concat([currLower, ...currLower.split(new RegExp(/\W+/gm))]);
+        return acc.concat(currLower.split(new RegExp(/\W+/gm)));
+      }
+      return acc.concat(currLower);
+    },
     [],
     cellsTextArr
   );
@@ -36,18 +44,29 @@ const getWordsList = (ss, sheet, textRanges) => {
   }
 };
 
-const getApiKeywordsList = (ss, mmpid, cCode) => {
-  const getField = getAppFieldCtor(mmpid);
-  const name = getField(`nickname`) || getField(`name`);
-  const os = getField('os');
+// const getApiKeywordsList = (ss, mmpid, cCode) => {
+//   const getField = getAppFieldCtor(mmpid);
+//   const name = getField(`nickname`) || getField(`name`);
+//   const os = getField('os');
 
-  const apiSheet = ss.getSheetByName(`API ${name} ${os} ${cCode.toUpperCase()}`);
-  const keywordsApiTable = apiSheet.getDataRange().getValues();
-  const headers = keywordsApiTable[0].map(curr =>
-    curr instanceof Date ? 'rank' : curr.toString()
-  );
-  const keywordsApiObj = keywordsApiTable.slice(1).map(curr => zipObj(headers, curr));
-  return keywordsApiObj;
+//   const apiSheet = ss.getSheetByName(`API ${name} ${os} ${cCode.toUpperCase()}`);
+//   const keywordsApiTable = apiSheet.getDataRange().getValues();
+//   const headers = keywordsApiTable[0].map(curr =>
+//     curr instanceof Date ? 'rank' : curr.toString()
+//   );
+//   const keywordsApiObj = keywordsApiTable.slice(1).map(curr => zipObj(headers, curr));
+//   return keywordsApiObj;
+// };
+
+const findAndRemoveCtor = list => word => {
+  const finder = findIndex(el => el.keyword.search(new RegExp(`\\b${word}\\b`, `gim`)) !== -1);
+  let ind = finder(list);
+  let res = [];
+  while (ind !== -1) {
+    res = res.concat(list.splice(ind, 1));
+    ind = finder(list);
+  }
+  return res;
 };
 
 const createRecommendations = (mmpid, cCode, textRanges) => {
@@ -55,9 +74,11 @@ const createRecommendations = (mmpid, cCode, textRanges) => {
   const sheet = ss.getActiveSheet();
 
   const wordsList = getWordsList(ss, sheet, textRanges);
-  const apiKeywordsList = getApiKeywordsList(ss, mmpid, cCode);
-  Logger.log(`${wordsList} ${apiKeywordsList}`);
-  return 'Done.';
+  const apiKeywordsList = DailyKeywordsRanking(mmpid, cCode);
+  const remover = findAndRemoveCtor(apiKeywordsList);
+  const unfiltered = reduce((acc, curr) => acc.concat(remover(curr)), [], wordsList);
+
+  return unfiltered;
 };
 
 export default createRecommendations;

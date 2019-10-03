@@ -174,11 +174,9 @@ const multiplication = (mults, toFile, toSheet) => {
     })
     .sort();
 
-  Logger.log('got this far');
   if (toSheet) {
     multToSheet(ss, hash, parsedMults.length, headers);
   }
-  Logger.log('then here');
   if (toFile) {
     return multToFile(hash, headers);
   }

@@ -24,7 +24,7 @@
     var os = $('input[type=radio]:checked').val();
     google.script.run
       .withSuccessHandler(apps => {
-        buildDropdownList(apps[os]);
+        buildDropdownList(apps[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())));
       })
       .GetDocumentApps();
   }
@@ -98,7 +98,7 @@
       .withSuccessHandler(function (appsList) {
         $("#chosenMmpApp option").remove();
         var os = $('input[type=radio]:checked').val();
-        var apps = appsList[os];
+        var apps = appsList[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
         $.each(apps, function (key, obj) {
           $("#chosenMmpApp").append($("<option>")
