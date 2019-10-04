@@ -114,6 +114,7 @@
 
   function printErr(err, element) {
     element.disabled = false;
+    $('#loading-indicator').hide();
     var errMsg = err || 'Something went wrong. Please check the add-on logs.';
     $('#error').text(errMsg).show();
     $('#error').delay(4000).fadeOut();
@@ -122,6 +123,7 @@
 
   function printSuccess(msg, element) {
     element.disabled = false;
+    $('#loading-indicator').hide();
     var sucMsg = msg || 'Done.';
     $('#success').text(sucMsg).show("fast");
     $('#success').delay(2000).fadeOut();

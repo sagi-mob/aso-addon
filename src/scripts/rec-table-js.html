@@ -1,35 +1,93 @@
 <script>
-
   $('#rec-table-btn').click(createRecommendations);
+
   function createRecommendations() {
     var ranges = $("#rec-table-ranges").val();
     var mmpid = $('#chosenDocApp :selected').val();
     var country = $('input[name=country]').val();
+    var conds = getRecObj();
+    console.log(conds);
     this.disabled = true;
     $('#loading-indicator').show();
     google.script.run
       .withSuccessHandler(function (res, el) {
-        $('#loading-indicator').hide();
         console.log(res);
         printSuccess(res, el);
 
       })
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .createRecommendations(mmpid, country, ranges);
+      .createRecommendations(mmpid, country, ranges, conds);
   }
 
+  function getRecObj() {
+    var fields = $(".filter-field");
+    var conds = $(".filter-cond");
+    var values = $(".filter-value");
+    var arrLen = fields.length;
+    var res = [];
+    for (var i = 0; i < arrLen; i++) {
+      res.push({
+        field: fields[i].value,
+        cond: conds[i].value,
+        val: values[i].value
+      })
+    }
+    return res;
+  }
+
+  function idCtor() {
+    var id = 0;
+    return function () {
+      return ++id;
+    }
+  }
+  var idGen = idCtor();
+
+  function removeFilter() {
+
+    var removerId = $(this).attr('id');
+    var rowId = `filter-${removerId.split('-')[1]}`;
+    $(`#${rowId}`).remove();
+  }
   $('#add-filter-btn').click(addFilter);
+
   function addFilter() {
-    var filtersLen = $('#filters').children().length;
-    $('#loading-indicator').toggle();
-    $('#filters').append(
-      $('<input type="text">')
-        .attr('class', 'form-control')
-        .attr('id', filtersLen)
-    );
-    ;
+    var filtersLen = $('#filters').length;
+    var id = idGen();
+    $('#filters-list tbody')
+      .append($('<tr>').attr('class', 'filter').attr('id', `filter-${id}`)
+        .append($('<td>')
+          .append($('<i>')
+            .attr('class', 'fas fa-minus-circle')
+            .attr('id', `minus-${id}`)
+            .click(removeFilter)
+          )
+        )
+        .append($('<td>')
+          .append($('<select>').attr('name', 'field').attr('class', 'custom-select custom-select-sm filter-field')
+            .append($('<option>').attr('value', 'traffic').text('Traffic'))
+            .append($('<option>').attr('value', 'difficulty').text('Difficulty'))
+            .append($('<option>').attr('value', 'competition').text('Competition'))
+            .append($('<option>').attr('value', 'ranking').text('Ranking'))
+          )
+        )
+        .append($('<td>')
+          .append($('<select>').attr('name', 'cond').attr('class', 'custom-select custom-select-sm filter-cond')
+            .append($('<option>').attr('value', 'gt').text('Greater Than'))
+            .append($('<option>').attr('value', 'gte').text('Greater Than or Equal to'))
+            .append($('<option>').attr('value', 'lt').text('Less Than'))
+            .append($('<option>').attr('value', 'lte').text('Less Than or Equal to'))
+            .append($('<option>').attr('value', 'eq').text('Equal to'))
+            .append($('<option>').attr('value', 'neq').text('Not Equal to'))
+          )
+        )
+        .append($('<td>')
+          .append($("<input>").attr('type', 'text').attr('class', 'form-control input-sm filter-value').attr("name",
+              'treshold')
+            .attr(
+              "placeholder", 'Value'))
+        )
+      );
   }
-
-
 </script>
