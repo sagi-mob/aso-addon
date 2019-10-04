@@ -1,4 +1,4 @@
-import { flatten, reduce, findIndex } from 'ramda';
+import { flatten, reduce, findIndex, filter } from 'ramda';
 // import { getAppFieldCtor } from './services/PropService';
 import { DailyKeywordsRanking } from './services/ApiService';
 
@@ -69,16 +69,50 @@ const findAndRemoveCtor = list => word => {
   return res;
 };
 
-const createRecommendations = (mmpid, cCode, textRanges) => {
+const operatorObj = () => {
+  const obj = {
+    gt: (val1, val2) => val1 > val2,
+    gte: (val1, val2) => val1 >= val2,
+    lt: (val1, val2) => val1 < val2,
+    lte: (val1, val2) => val1 <= val2,
+    eq: (val1, val2) => val1 === val2,
+    neq: (val1, val2) => val1 !== val2
+  };
+  return key => obj[key];
+};
+
+const fieldObj = () => {
+  const obj = {
+    traffic: 'searchVolume',
+    difficulty: 'chance',
+    competition: 'numberOfApps',
+    rank: 'rank'
+  };
+  return key => obj[key];
+};
+
+const filterListCtor = conds => {
+  const applyOp = operatorObj();
+  const getField = fieldObj();
+  return key =>
+    reduce(
+      (acc, cond) => acc && applyOp(cond.cond)(key[getField(cond.field)], cond.val),
+      true,
+      conds
+    );
+};
+
+const createRecommendations = (mmpid, cCode, textRanges, conds) => {
   const ss = SpreadsheetApp.getActive();
   const sheet = ss.getActiveSheet();
 
   const wordsList = getWordsList(ss, sheet, textRanges);
   const apiKeywordsList = DailyKeywordsRanking(mmpid, cCode);
-  const remover = findAndRemoveCtor(apiKeywordsList);
+  const filtering = filterListCtor(conds);
+  const filteredKeys = filter(filtering, apiKeywordsList);
+  const remover = findAndRemoveCtor(filteredKeys);
   const unfiltered = reduce((acc, curr) => acc.concat(remover(curr)), [], wordsList);
-
-  return unfiltered;
+  return unfiltered.map(key => key.keyword).join('\n');
 };
 
 export default createRecommendations;
