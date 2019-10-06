@@ -133,16 +133,16 @@ const getSpecialFieldCtor = (oldKeywordsList, newKeywordsList) => {
   };
 };
 
-const filterListCtor = (oldKeywordsList, newKeywordsList, conds) => {
+const filterListCtor = (conds) => {
   const applyOp = applyPrimOpCtor();
-  const getSpecialField = getSpecialFieldCtor(oldKeywordsList, newKeywordsList);
+  
   return keyword => {
     const getPrimField = getPrimFieldCtor(keyword);
     return reduce(
       (acc, cond) =>
         acc ||
         applyOp(cond.cond)(
-          getPrimField(cond.field) || getSpecialField[cond.field](keyword.keyword),
+          getPrimField(cond.field),
           cond.val
         ),
       false,
@@ -151,21 +151,21 @@ const filterListCtor = (oldKeywordsList, newKeywordsList, conds) => {
   };
 };
 
-// const primCondFilter = cond =>
-//   cond.field === 'traffic' ||
-//   cond.field === 'difficulty' ||
-//   cond.field === 'competition' ||
-//   cond.field === 'rank' ||
-//   cond.field === 'tdl';
+const primCondFilter = cond =>
+  cond.field === 'traffic' ||
+  cond.field === 'difficulty' ||
+  cond.field === 'competition' ||
+  cond.field === 'rank' ||
+  cond.field === 'tdl';
 
-// const specialCondFilter = cond => cond.field === 'pc' || cond.field === 'rd';
+const specialCondFilter = cond => cond.field === 'pc' || cond.field === 'rd';
 
 const createRecommendations = (mmpid, cCode, textRanges, comparisonDate, conds) => {
   const ss = SpreadsheetApp.getActive();
   const sheet = ss.getActiveSheet();
 
-  // const primConds = conds.filter(primCondFilter);
-  // const specialConds = conds.filter(specialCondFilter);
+  const primConds = conds.filter(primCondFilter);
+  const specialConds = conds.filter(specialCondFilter);
 
   // Extract words in text assets and also Relevant keywords from 'relevance' tab
   const wordsList = getWordsList(ss, sheet, textRanges);
@@ -176,10 +176,11 @@ const createRecommendations = (mmpid, cCode, textRanges, comparisonDate, conds) 
     throw Error('The API sheet is not updated with the latest keywords');
   }
 
+  const getSpecialField = getSpecialFieldCtor(oldKeywordsList, newKeywordsList);
   // Fetches all keywords that fulfill one of the given primitive conditions
-  const filtering = filterListCtor(oldKeywordsList, newKeywordsList, conds);
+  const filtering = filterListCtor(conds);
   const primitiveFiltered = filter(filtering, newKeywordsList);
-  //
+  
   const extractor = findAndExtractCtor(primitiveFiltered);
   const unfiltered = reduce((acc, curr) => acc.concat(extractor(curr)), [], wordsList);
   return unfiltered
