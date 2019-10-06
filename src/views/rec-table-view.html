@@ -6,11 +6,13 @@
   </span>
 </div>
 
-
 <div class="rec-table-cont">
   <fieldset>
     <legend for="rec-table-ranges">Enter Text Ranges:</legend>
-    <textarea type='text' class="form-control" id="rec-table-ranges" cols="50" rows="2"></textarea>
+    <textarea type="text" class="form-control" id="rec-table-ranges" cols="50" rows="2"></textarea>
+
+    <legend for="filter-date">Date:</legend>
+    <input class="form-control" type="date" name="filter-date" id="filter-date" />
 
     <legend for="filters-list">Filters List:<i class="fas fa-plus" id="add-filter-btn"></i></legend>
     <div id="filters-list">
@@ -23,9 +25,7 @@
             <th>Value</th>
           </tr>
         </thead>
-        <tbody>
-
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
     <div class="block ma-buttons" id="button-bar">
