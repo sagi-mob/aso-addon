@@ -17,12 +17,12 @@
     var ranges = $('#rec-table-ranges').val();
     var mmpid = $('#chosenDocApp :selected').val();
     var country = $('input[name=country]').val();
-    var comparisonDate = $('#comparison-date').val();
+    var comparisonDate = $('#filter-date').val();
     var conds = getRecObj();
     this.disabled = true;
     $('#loading-indicator').show();
     google.script.run
-      .withSuccessHandler(function(res, el) {
+      .withSuccessHandler(function (res, el) {
         download('chosen keywords', res);
         printSuccess(res, el);
       })
@@ -49,7 +49,7 @@
 
   function idCtor() {
     var id = 0;
-    return function() {
+    return function () {
       return ++id;
     };
   }
@@ -67,104 +67,104 @@
     var id = idGen();
     $('#filters-list tbody').append(
       $('<tr>')
-        .attr('class', 'filter')
-        .attr('id', `filter-${id}`)
-        .append(
-          $('<td>').append(
-            $('<i>')
-              .attr('class', 'fas fa-minus-circle')
-              .attr('id', `minus-${id}`)
-              .click(removeFilter)
+      .attr('class', 'filter')
+      .attr('id', `filter-${id}`)
+      .append(
+        $('<td>').append(
+          $('<i>')
+          .attr('class', 'fas fa-minus-circle')
+          .attr('id', `minus-${id}`)
+          .click(removeFilter)
+        )
+      )
+      .append(
+        $('<td>').append(
+          $('<select>')
+          .attr('name', 'field')
+          .attr('class', 'custom-select custom-select-sm filter-field')
+          .append(
+            $('<option>')
+            .attr('value', 'traffic')
+            .text('Traffic')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'difficulty')
+            .text('Difficulty')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'competition')
+            .text('Competition')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'rank')
+            .text('Rank')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'tdl')
+            .text('Traffic/Length')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'pc')
+            .text('Permutation Count')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'rd')
+            .text('Rank Difference')
           )
         )
-        .append(
-          $('<td>').append(
-            $('<select>')
-              .attr('name', 'field')
-              .attr('class', 'custom-select custom-select-sm filter-field')
-              .append(
-                $('<option>')
-                  .attr('value', 'traffic')
-                  .text('Traffic')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'difficulty')
-                  .text('Difficulty')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'competition')
-                  .text('Competition')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'rank')
-                  .text('Rank')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'tdl')
-                  .text('Traffic/Length')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'pc')
-                  .text('Permutation Count')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'rd')
-                  .text('Rank Difference')
-              )
+      )
+      .append(
+        $('<td>').append(
+          $('<select>')
+          .attr('name', 'cond')
+          .attr('class', 'custom-select custom-select-sm filter-cond')
+          .append(
+            $('<option>')
+            .attr('value', 'gt')
+            .text('Greater Than')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'gte')
+            .text('Greater Than or Equal to')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'lt')
+            .text('Less Than')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'lte')
+            .text('Less Than or Equal to')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'eq')
+            .text('Equal to')
+          )
+          .append(
+            $('<option>')
+            .attr('value', 'neq')
+            .text('Not Equal to')
           )
         )
-        .append(
-          $('<td>').append(
-            $('<select>')
-              .attr('name', 'cond')
-              .attr('class', 'custom-select custom-select-sm filter-cond')
-              .append(
-                $('<option>')
-                  .attr('value', 'gt')
-                  .text('Greater Than')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'gte')
-                  .text('Greater Than or Equal to')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'lt')
-                  .text('Less Than')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'lte')
-                  .text('Less Than or Equal to')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'eq')
-                  .text('Equal to')
-              )
-              .append(
-                $('<option>')
-                  .attr('value', 'neq')
-                  .text('Not Equal to')
-              )
-          )
+      )
+      .append(
+        $('<td>').append(
+          $('<input>')
+          .attr('type', 'text')
+          .attr('class', 'form-control input-sm filter-value')
+          .attr('name', 'treshold')
+          .attr('placeholder', 'Value')
         )
-        .append(
-          $('<td>').append(
-            $('<input>')
-              .attr('type', 'text')
-              .attr('class', 'form-control input-sm filter-value')
-              .attr('name', 'treshold')
-              .attr('placeholder', 'Value')
-          )
-        )
+      )
     );
   }
 </script>

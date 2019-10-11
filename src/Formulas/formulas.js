@@ -1,3 +1,6 @@
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 /**
  * For each cell in {searchCol} that contains the cell content, it adds
  * the correspond value from the same row in {sumCol}
@@ -26,7 +29,8 @@ function SUMIFALL(keywordsRange, searchRange, numericalRange, criterionRange, cr
       var traffic = Number(numericalRange[i]);
       var criterionRangeVal = Number(criterionRange[i]);
       var phrase = searchRange[i].toString();
-      var found = phrase.search(new RegExp('\\b('+cell+')\\b', 'gim')) != -1;
+      var escapedCell = escapeRegExp(cell); // function can be found in utils.js
+      var found = phrase.search(new RegExp('\\b('+escapedCell+')\\b', 'gim')) != -1;
       sum += checkCriteria(criterionRangeVal) && found ? traffic : 0;
     }
     return sum;
@@ -56,7 +60,8 @@ function SUMIFREGEX(cell, searchCol, sumCol, criterion) {
   for (var i = 0; i < searchCol.length; i++) {
     var traffic = Number(sumCol[i]);
     var phrase = searchCol[i].toString();
-    var found = phrase.search(new RegExp('\\b('+cell+')\\b', 'gim')) != -1;
+    var escapedCell = escapeRegExp(cell); // function can be found in utils.js
+    var found = phrase.search(new RegExp('\\b('+escapedCell+')\\b', 'gim')) != -1;
     sum += checkCriteria(traffic) && found ? traffic : 0;
   }
   return sum;
@@ -75,7 +80,8 @@ function SUMSCORE(cell, keysRange, scoreRange) {
   if(keysRange.length != scoreRange.length)
     throw Error("Keywords Range and Score range don't match");
   var sum = keysRange.reduce(function(acc, curr, ind){
-    if(String(cell).search(new RegExp("\\b" + curr + "\\b","gim")) !== -1){
+    var escapedCurr = escapeRegExp(curr); // function can be found in utils.js
+    if(String(cell).search(new RegExp("\\b" + escapedCurr + "\\b","gim")) !== -1){
       return acc + Number(scoreRange[ind]);
     }
     return acc;
