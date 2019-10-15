@@ -5,7 +5,6 @@
     GetMobileActionApps();
   }
 
-
   //--------------- REFERSH APP API FUNCTIONS ----------------//
   function loadAppsKeywords() {
     var mmpid = $('#chosenDocApp :selected').val();
@@ -24,22 +23,25 @@
     var os = $('input[type=radio]:checked').val();
     google.script.run
       .withSuccessHandler(apps => {
-        buildDropdownList(apps[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase())));
+        buildDropdownList(
+          apps[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+        );
       })
       .GetDocumentApps();
   }
 
   function buildDropdownList(apps) {
-    $("#chosenDocApp option").remove();
-    $.each(apps, function (key, obj) {
-      $("#chosenDocApp").append($("<option>")
-        .attr('value', obj["mmpid"])
-        .attr('os', obj["os"])
-        .attr('name', obj["name"])
-        .attr('storeid', obj["storeid"])
-        .text(obj["name"]));
+    $('#chosenDocApp option').remove();
+    $.each(apps, function(key, obj) {
+      $('#chosenDocApp').append(
+        $('<option>')
+          .attr('value', obj['mmpid'])
+          .attr('os', obj['os'])
+          .attr('name', obj['name'])
+          .attr('storeid', obj['storeid'])
+          .text(obj['name'])
+      );
     });
-
   }
 
   //--------------- TRACK APP FUNCTIONS ----------------//
@@ -62,8 +64,8 @@
     var mmpid = $('#chosenDocApp :selected').val();
     this.disabled = true;
     google.script.run
-      .withSuccessHandler(function (msg, element) {
-        printSuccess(msg, element)
+      .withSuccessHandler(function(msg, element) {
+        printSuccess(msg, element);
         GetDocumentApps();
       })
       .withFailureHandler(printErr)
@@ -81,7 +83,7 @@
 
     this.disabled = true;
     google.script.run
-      .withSuccessHandler(function (msg, el) {
+      .withSuccessHandler(function(msg, el) {
         printSuccess(msg, el);
         GetDocumentApps();
       })
@@ -95,38 +97,48 @@
     if (!aaContVis) return;
 
     google.script.run
-      .withSuccessHandler(function (appsList) {
-        $("#chosenMmpApp option").remove();
+      .withSuccessHandler(function(appsList) {
+        $('#chosenMmpApp option').remove();
         var os = $('input[type=radio]:checked').val();
-        var apps = appsList[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+        var apps = appsList[os].sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
 
-        $.each(apps, function (key, obj) {
-          $("#chosenMmpApp").append($("<option>")
-            .attr('value', obj['mmpid'])
-            .attr('os', os)
-            .attr('name', obj['name'])
-            .attr('storeid', obj['storeid'])
-            .text(obj['name']));
+        $.each(apps, function(key, obj) {
+          $('#chosenMmpApp').append(
+            $('<option>')
+              .attr('value', obj['mmpid'])
+              .attr('os', os)
+              .attr('name', obj['name'])
+              .attr('storeid', obj['storeid'])
+              .text(obj['name'])
+          );
         });
       })
       .GetMobileActionApps();
   }
 
-  function printErr(err, element) {
-    element.disabled = false;
-    $('#loading-indicator').hide();
-    var errMsg = err || 'Something went wrong. Please check the add-on logs.';
-    $('#error').text(errMsg).show();
-    $('#error').delay(4000).fadeOut();
+  function printErr(errdMsg, el) {
+    var msg = errdMsg || 'Something went wrong. Please check the add-on logs.';
+    $('div.feedback-msg').css('background-color', '#D92606');
+    printMsg(msg, el);
     return false;
   }
 
-  function printSuccess(msg, element) {
+  function printSuccess(sucMsg, el) {
+    var msg = sucMsg || 'Done';
+    $('div.feedback-msg').css('background-color', '#86CE11');
+    printMsg(msg, el);
+    return false;
+  }
+
+  function printMsg(msg, element) {
     element.disabled = false;
     $('#loading-indicator').hide();
-    var sucMsg = msg || 'Done.';
-    $('#success').text(sucMsg).show("fast");
-    $('#success').delay(2000).fadeOut();
-    return false;
+    $('div.feedback-msg h5').text(msg);
+    $('div.feedback-msg')
+      .show('fast')
+      .delay(3000)
+      .fadeOut('slow');
   }
 </script>
