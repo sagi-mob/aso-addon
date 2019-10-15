@@ -1,8 +1,10 @@
-const configureSidebar = (filename, title, width) => {
-  const sidebar = HtmlService.createTemplateFromFile(filename)
+const configureSidebar = (filename, title) => {
+  const template = HtmlService.createTemplateFromFile(filename);
+  template.navbar = 'navbar.html';
+  const sidebar = template
     .evaluate()
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(width || 300)
+    // .setWidth(width || 300)
     .setTitle(title);
   SpreadsheetApp.getUi().showSidebar(sidebar);
 };
@@ -16,7 +18,7 @@ export { showControlPanel, showMultiplySidebar, showHightlightSidebar, showKeysC
 
 // { //T HERE IS AN OPTION TO PASS VARIABLE TO THE TEMPLATE
 //   const template = HtmlService.createTemplateFromFile('ControlPanel');
-//   // template.myVar = 'Sagi'; // <--- This is how
+//   template.myVar = 'Sagi'; // <--- This is how
 //   const sidebar = template
 //     .evaluate()
 //     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
