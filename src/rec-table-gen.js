@@ -124,10 +124,11 @@ const getSpecialFieldCtor = (oldKeywordsList, newKeywordsList) => {
       return matches ? matches.length : 0;
     },
     rd: keyword => {
-      Logger.log(`new rank: ${newKeywordsObj[keyword].rank}
-      old ran: ${oldKeywordsObj[keyword].rank}
-      diff: ${newKeywordsObj[keyword].rank - oldKeywordsObj[keyword].rank}`);
-      return newKeywordsObj[keyword].rank - oldKeywordsObj[keyword].rank;
+      const oldRank = oldKeywordsObj[keyword].rank;
+      const newRank = newKeywordsObj[keyword].rank;
+      const diff = newRank - oldRank;
+      const percentage = (diff / oldRank) * 100;
+      return percentage * -1; // lower ranking is better
     }
   };
 };
@@ -154,9 +155,6 @@ const filterListCtor = (oldKeywordsList, newKeywordsList, excluded, conds) => {
             ? getSpecialField[field](keyword.keyword)
             : undefined;
         const val1 = getPrimField(field) || pc || getSpecialField[field](keyword.keyword);
-        Logger.log(`val1: ${val1}
-        cond.val: ${cond.val}
-        field: ${field}`);
         return acc || applyOp(cond.cond)(val1, cond.val);
       },
       false,
