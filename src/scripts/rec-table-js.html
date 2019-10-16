@@ -1,16 +1,4 @@
 <script>
-  function download(filename, text) {
-    var element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-    element.setAttribute('download', filename);
-
-    element.style.display = 'none';
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-  }
   $('#rec-table-btn').click(createRecommendations);
 
   function createRecommendations() {
@@ -23,8 +11,7 @@
     $('#loading-indicator').show();
     google.script.run
       .withSuccessHandler(function(res, el) {
-        download('chosen keywords', res);
-        printSuccess(res, el);
+        printSuccess('', el);
       })
       .withFailureHandler(printErr)
       .withUserObject(this)
