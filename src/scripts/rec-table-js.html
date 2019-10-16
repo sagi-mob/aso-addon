@@ -48,7 +48,7 @@
   }
 
   function idCtor() {
-    var id = 0;
+    var id = 5;
     return function() {
       return ++id;
     };
@@ -60,10 +60,17 @@
     var rowId = `filter-${removerId.split('-')[1]}`;
     $(`#${rowId}`).remove();
   }
+
+  $(function() {
+    var hardCodedFiltersIcons = $('tr.filter i');
+    for (var i = 0; i < hardCodedFiltersIcons.length; i += 1) {
+      $(hardCodedFiltersIcons[i]).click(removeFilter);
+    }
+  });
+
   $('#add-filter-btn').click(addFilter);
 
   function addFilter() {
-    var filtersLen = $('#filters').length;
     var id = idGen();
     $('#filters-list tbody').append(
       $('<tr>')

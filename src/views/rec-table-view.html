@@ -25,7 +25,113 @@
             <th>Value</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          <tr class="filter" id="filter-1">
+            <td><i class="fas fa-minus-circle" id="minus-1"></i></td>
+            <td>
+              <select name="field" class="custom-select custom-select-sm filter-field">
+                <option value="traffic" selected disabled>Traffic</option>
+              </select>
+            </td>
+            <td>
+              <select name="cond" class="custom-select custom-select-sm filter-cond">
+                <option value="gte" selected disabled>Greater Than or Equal to</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control input-sm filter-value"
+                name="treshold"
+                placeholder="Value"
+              />
+            </td>
+          </tr>
+          <tr class="filter" id="filter-2">
+            <td><i class="fas fa-minus-circle" id="minus-2"></i></td>
+            <td>
+              <select name="field" class="custom-select custom-select-sm filter-field">
+                <option value="rank" selected disabled>Rank</option>
+              </select>
+            </td>
+            <td>
+              <select name="cond" class="custom-select custom-select-sm filter-cond">
+                <option value="lte" selected disabled>Less Than or Equal to</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control input-sm filter-value"
+                name="treshold"
+                placeholder="Value"
+              />
+            </td>
+          </tr>
+          <tr class="filter" id="filter-3">
+            <td><i class="fas fa-minus-circle" id="minus-3"></i></td>
+            <td>
+              <select name="field" class="custom-select custom-select-sm filter-field">
+                <option value="tdl" selected disabled>Traffic/Length</option>
+              </select>
+            </td>
+            <td>
+              <select name="cond" class="custom-select custom-select-sm filter-cond">
+                <option value="gte" selected disabled>Greater Than or Equal to</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control input-sm filter-value"
+                name="treshold"
+                placeholder="Value"
+              />
+            </td>
+          </tr>
+          <tr class="filter" id="filter-4">
+            <td><i class="fas fa-minus-circle" id="minus-4"></i></td>
+            <td>
+              <select name="field" class="custom-select custom-select-sm filter-field">
+                <option value="pc" selected disabled>Permutation Count</option>
+              </select>
+            </td>
+            <td>
+              <select name="cond" class="custom-select custom-select-sm filter-cond">
+                <option value="gte" selected disabled>Greater Than or Equal to</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control input-sm filter-value"
+                name="treshold"
+                placeholder="Value"
+              />
+            </td>
+          </tr>
+          <tr class="filter" id="filter-5">
+            <td><i class="fas fa-minus-circle" id="minus-5"></i></td>
+            <td>
+              <select name="field" class="custom-select custom-select-sm filter-field">
+                <option value="rd" selected disabled>Rank Difference (%)</option>
+              </select>
+            </td>
+            <td>
+              <select name="cond" class="custom-select custom-select-sm filter-cond">
+                <option value="gte" selected disabled>Greater Than or Equal to</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                class="form-control input-sm filter-value"
+                name="treshold"
+                placeholder="Value"
+              />
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="block ma-buttons" id="button-bar">
