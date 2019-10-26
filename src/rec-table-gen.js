@@ -189,12 +189,21 @@ const createRecommendations = (mmpid, cCode, textRanges, comparisonDate, conds) 
   // Fetches all keywords that fulfill one of the given primitive conditions
   const filter = filterListCtor(oldKeywordsList, newKeywordsList, [], conds);
   const filteredKeys = newKeywordsList.filter(filter).map(key => key.keyword);
-  return filteredKeys
+  const combined = filteredKeys
     .concat(rangeWords)
     .concat(relevantWords)
     .filter(duplicateRemoveFilter)
-    .sort()
-    .join('\n');
+    .sort();
+
+  if (!ss.getSheetByName('Chosen Keys')) {
+    ss.insertSheet('Chosen Keys');
+  }
+  const chosenKeysSheet = ss.getSheetByName('Chosen Keys');
+  const len = combined.length + 1;
+
+  const column = map(curr => [curr], ['Keywords'].concat(combined));
+  Logger.log(column);
+  chosenKeysSheet.getRange(1, 1, len, 1).setValues(column);
 };
 
 export default createRecommendations;
