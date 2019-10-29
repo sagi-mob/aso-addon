@@ -1,0 +1,12 @@
+<script>
+  function openSidebar(el) {
+    const page = el.target.getAttribute('page');
+    const title = el.target.getAttribute('title');
+
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .openSidebar(page, title, 'manage-app-view.html');
+  }
+</script>

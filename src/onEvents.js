@@ -2,13 +2,12 @@ const onOpen = () => {
   const ui = SpreadsheetApp.getUi();
   const menu = ui.createAddonMenu();
   menu.addItem('Install', 'onInstall').addSeparator();
-  menu
-    .addItem('Control Panel', 'showControlPanel')
-    .addSeparator()
-    .addItem('Keywords Multiplication', 'showMultiplySidebar')
-    .addSeparator()
-    .addItem('Highlight Keywords', 'showHightlightSidebar')
-    .addItem('Description Keywords Counter', 'showKeysCounterSidebar');
+  menu.addItem('Control Panel', 'openAddon');
+  // .addSeparator()
+  // .addItem('Keywords Multiplication', 'showMultiplySidebar')
+  // .addSeparator()
+  // .addItem('Highlight Keywords', 'showHightlightSidebar')
+  // .addItem('Description Keywords Counter', 'showKeysCounterSidebar');
 
   menu.addToUi();
 };

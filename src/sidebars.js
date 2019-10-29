@@ -1,20 +1,19 @@
-const configureSidebar = (filename, title) => {
+const openSidebar = (filename, title, config) => {
   const template = HtmlService.createTemplateFromFile(filename);
-  template.navbar = 'navbar.html';
+  template.config = config;
   const sidebar = template
     .evaluate()
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    // .setWidth(width || 300)
     .setTitle(title);
   SpreadsheetApp.getUi().showSidebar(sidebar);
 };
 
-const showControlPanel = () => configureSidebar('ControlPanel', 'Control Panel');
-const showMultiplySidebar = () => configureSidebar('multiplySidebar', 'Multiplications');
-const showHightlightSidebar = () => configureSidebar('highlightSidebar', 'Highlighter');
-const showKeysCounterSidebar = () => configureSidebar('keyCounterSidebar', 'Keywords Counter');
+// const showControlPanel = () => configureSidebar('manage-app', 'Manage App');
+// const showMultiplySidebar = () => configureSidebar('multiplySidebar', 'Multiplications');
+// const showHightlightSidebar = () => configureSidebar('highlightSidebar', 'Highlighter');
+// const showKeysCounterSidebar = () => configureSidebar('keyCounterSidebar', 'Keywords Counter');
 
-export { showControlPanel, showMultiplySidebar, showHightlightSidebar, showKeysCounterSidebar };
+export default openSidebar;
 
 // { //T HERE IS AN OPTION TO PASS VARIABLE TO THE TEMPLATE
 //   const template = HtmlService.createTemplateFromFile('ControlPanel');

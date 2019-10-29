@@ -1,4 +1,4 @@
-import * as Sidebars from './sidebars';
+import openSidebar from './sidebars';
 import { onOpen, onInstall } from './onEvents';
 import * as DashboardService from './services/ApiService';
 import { GetMobileActionApps, GetDocumentApps } from './services/AppsService';
@@ -11,10 +11,11 @@ import wordCounter from './keysDescriptionCounter';
 import multiplication from './multiplication';
 import createRecommendations from './rec-table-gen';
 
-global.showControlPanel = Sidebars.showControlPanel;
-global.showHightlightSidebar = Sidebars.showHightlightSidebar;
-global.showKeysCounterSidebar = Sidebars.showKeysCounterSidebar;
-global.showMultiplySidebar = Sidebars.showMultiplySidebar;
+global.openAddon = () => openSidebar('main-sidebar', 'Control Panel', 'manage-app-view.html');
+// global.showHightlightSidebar = Sidebars.showHightlightSidebar;
+// global.showKeysCounterSidebar = Sidebars.showKeysCounterSidebar;
+// global.showMultiplySidebar = Sidebars.showMultiplySidebar;
+global.openSidebar = openSidebar;
 global.onOpen = onOpen;
 global.onInstall = onInstall;
 global.include = filename => HtmlService.createHtmlOutputFromFile(filename).getContent();
