@@ -6,21 +6,7 @@
     $('#loadAppsKeywords').click(loadAppsKeywords);
     $('#add-to-tracker').click(addToTracker);
     $('input[name=os]').click(GetDocumentApps);
-    $('a.nav-link').click(openSidebar);
   });
-  //--------------- REFERSH APP API FUNCTIONS ----------------//
-  function loadAppsKeywords() {
-    var mmpid = $('#chosenDocApp :selected').val();
-    var country = $('input[name=country]').val();
-    var date = $('input[name=date]').val();
-
-    this.disabled = true;
-    google.script.run
-      .withSuccessHandler(printSuccess)
-      .withFailureHandler(printErr)
-      .withUserObject(this)
-      .loadAppsKeywords(mmpid, country, date);
-  }
 
   function GetDocumentApps() {
     var os = $('input[type=radio]:checked').val();
@@ -46,6 +32,22 @@
       );
     });
   }
+
+  //--------------- REFERSH APP API FUNCTIONS ----------------//
+  function loadAppsKeywords() {
+    var mmpid = $('#chosenDocApp :selected').val();
+    var country = $('input[name=country]').val();
+    var date = $('input[name=date]').val();
+
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .loadAppsKeywords(mmpid, country, date);
+  }
+
+
 
   //--------------- TRACK APP FUNCTIONS ----------------//
 

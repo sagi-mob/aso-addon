@@ -5,7 +5,7 @@ const createView = (view, component) => {
     html: {
       'manage-app': ['basic-app-settings-view', 'manage-app-view'],
       'add-app': ['basic-app-settings-view', 'add-app-view'],
-      'rec-table': ['rec-table-view'],
+      'rec-table': ['basic-app-settings-view', 'rec-table-view'],
       multiplicator: ['multiplicator'],
       'keys-counter': ['keys-counter'],
       highlighter: ['highlighter']
@@ -32,6 +32,7 @@ const openSidebar = (filename, title, view) => {
   const template = HtmlService.createTemplateFromFile(filename);
   template.view = createView(view, 'html');
   template.script = createView(view, 'script');
+  template.currentView = view;
   const sidebar = template
     .evaluate()
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)

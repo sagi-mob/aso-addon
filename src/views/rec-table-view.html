@@ -1,17 +1,23 @@
-<div class="horizontal-toggle">
+<!-- <div class="horizontal-toggle">
   <span class="checkbox-label">Chosen Keywords Generator</span>
   <span class="toggle-icon">
     <input type="checkbox" id="ck-cbx" style="display:none" />
     <label for="ck-cbx" class="toggle"><span></span></label>
   </span>
-</div>
+</div> -->
 
-<div class="rec-table-cont">
+<div class="rec-table-cont container">
+  <fieldset>
+    <legend>
+      Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="GetDocumentApps()"></i>
+    </legend>
+    <select id="chosenDocApp"></select>
+  </fieldset>
   <fieldset>
     <legend for="rec-table-ranges">Enter Text Ranges:</legend>
     <textarea type="text" class="form-control" id="rec-table-ranges" cols="50" rows="2"></textarea>
 
-    <legend for="filter-date">Date:</legend>
+    <legend for="filter-date">Comparison Date:</legend>
     <input class="form-control" type="date" name="filter-date" id="filter-date" />
 
     <legend for="filters-list">Filters List:<i class="fas fa-plus" id="add-filter-btn"></i></legend>
@@ -39,13 +45,8 @@
               </select>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control input-sm filter-value"
-                name="treshold"
-                placeholder="Value"
-                value="5"
-              />
+              <input type="text" class="form-control input-sm filter-value" name="treshold" placeholder="Value"
+                value="5" />
             </td>
           </tr>
           <tr class="filter" id="filter-2">
@@ -61,13 +62,8 @@
               </select>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control input-sm filter-value"
-                name="treshold"
-                placeholder="Value"
-                value="10"
-              />
+              <input type="text" class="form-control input-sm filter-value" name="treshold" placeholder="Value"
+                value="10" />
             </td>
           </tr>
           <tr class="filter" id="filter-3">
@@ -83,13 +79,8 @@
               </select>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control input-sm filter-value"
-                name="treshold"
-                placeholder="Value"
-                value="0.8"
-              />
+              <input type="text" class="form-control input-sm filter-value" name="treshold" placeholder="Value"
+                value="0.8" />
             </td>
           </tr>
           <tr class="filter" id="filter-4">
@@ -105,13 +96,8 @@
               </select>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control input-sm filter-value"
-                name="treshold"
-                placeholder="Value"
-                value="30"
-              />
+              <input type="text" class="form-control input-sm filter-value" name="treshold" placeholder="Value"
+                value="30" />
             </td>
           </tr>
           <tr class="filter" id="filter-5">
@@ -127,13 +113,8 @@
               </select>
             </td>
             <td>
-              <input
-                type="text"
-                class="form-control input-sm filter-value"
-                name="treshold"
-                placeholder="Value"
-                value="50"
-              />
+              <input type="text" class="form-control input-sm filter-value" name="treshold" placeholder="Value"
+                value="50" />
             </td>
           </tr>
         </tbody>
