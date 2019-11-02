@@ -1,12 +1,16 @@
 <script>
+  $(function () {
+    $('a.nav-link').click(openSidebar);
+  });
+
   function openSidebar(el) {
-    const page = el.target.getAttribute('page');
+    const view = el.target.getAttribute('view');
     const title = el.target.getAttribute('title');
 
     google.script.run
       .withSuccessHandler(printSuccess)
       .withFailureHandler(printErr)
       .withUserObject(this)
-      .openSidebar(page, title, 'manage-app-view.html');
+      .openSidebar('main-sidebar', title, view);
   }
 </script>

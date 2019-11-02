@@ -1,0 +1,52 @@
+<script>
+  $(function () {
+    GetMobileActionApps();
+    $('input[name=os]').click(GetMobileActionApps);
+    $('refresh-suggestions').click(GetMobileActionApps);
+    $('#add-app').click(addApp);
+  });
+  //--------------- ADD APP FUNCTIONS ----------------//
+  function addApp() {
+    var country = $('input[name=country]').val();
+    var os = $('#chosenMmpApp :selected').attr('os');
+    var storeid = $('#chosenMmpApp :selected').attr('storeid');
+    var mmpid = $('#chosenMmpApp :selected').val();
+    var name = $('#chosenMmpApp :selected').text();
+
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(function (msg, el) {
+        printSuccess(msg, el);
+        GetDocumentApps();
+      })
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .addApp(mmpid, name, os, country, storeid);
+  }
+
+  function GetMobileActionApps() {
+    var aaContVis = $('div.add-app-cont').css('display') != 'none';
+    if (!aaContVis) return;
+
+    google.script.run
+      .withSuccessHandler(function (appsList) {
+        $('#chosenMmpApp option').remove();
+        var os = $('input[type=radio]:checked').val();
+        var apps = appsList[os].sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
+
+        $.each(apps, function (key, obj) {
+          $('#chosenMmpApp').append(
+            $('<option>')
+            .attr('value', obj['mmpid'])
+            .attr('os', os)
+            .attr('name', obj['name'])
+            .attr('storeid', obj['storeid'])
+            .text(obj['name'])
+          );
+        });
+      })
+      .GetMobileActionApps();
+  }
+</script>

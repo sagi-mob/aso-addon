@@ -1,0 +1,25 @@
+<script>
+  function printErr(errdMsg, el) {
+    var msg = errdMsg || 'Something went wrong. Please check the add-on logs.';
+    $('div.feedback-msg').css('background-color', '#D92606');
+    printMsg(msg, el);
+    return false;
+  }
+
+  function printSuccess(sucMsg, el) {
+    var msg = sucMsg || 'Done';
+    $('div.feedback-msg').css('background-color', '#86CE11');
+    printMsg(msg, el);
+    return false;
+  }
+
+  function printMsg(msg, element) {
+    element.disabled = false;
+    $('#loading-indicator').hide();
+    $('div.feedback-msg h5').text(msg);
+    $('div.feedback-msg')
+      .show('fast')
+      .delay(3000)
+      .fadeOut('slow');
+  }
+</script>

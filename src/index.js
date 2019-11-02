@@ -11,7 +11,7 @@ import wordCounter from './keysDescriptionCounter';
 import multiplication from './multiplication';
 import createRecommendations from './rec-table-gen';
 
-global.openAddon = () => openSidebar('main-sidebar', 'Control Panel', 'manage-app-view.html');
+global.openAddon = () => openSidebar('main-sidebar', 'Control Panel', 'manage-app');
 // global.showHightlightSidebar = Sidebars.showHightlightSidebar;
 // global.showKeysCounterSidebar = Sidebars.showKeysCounterSidebar;
 // global.showMultiplySidebar = Sidebars.showMultiplySidebar;

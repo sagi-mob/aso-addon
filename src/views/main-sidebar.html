@@ -10,48 +10,17 @@
 </header>
 
 <body>
-  <div class="container">
-    <?!= include(config); ?>
-    <?!= include('rec-table-view'); ?>
 
-  </div>
+  <?!= view ?>
   <div class="feedback-msg">
     <h5></h5>
   </div>
   <img src="https://www.wisesample.com/img/waiting.gif" id="loading-indicator" style="display:none" />
 </body>
-
-<?!= include('main-js'); ?>
-<?!= include ('rec-table-js'); ?>
 <?!= include('footer-imports'); ?>
 <?!= include ('navbar-js'); ?>
-<script>
-  $(function () {
-    GetDocumentApps();
-    $('.add-app-cont').hide();
-    $('.manage-app-cont').hide();
-    $('.rec-table-cont').hide();
-    $('#refreshApps').click(GetDocumentApps);
-    $('#delete-app').click(deleteApp);
-    $('#loadAppsKeywords').click(loadAppsKeywords);
-    $('#add-to-tracker').click(addToTracker);
-    $('rec-table-btn').click(createRecommendations);
-    $('input[type=radio]').click(osChanged);
-    $('refresh-suggestions').click(GetMobileActionApps);
-    $('#add-app').click(addApp);
-
-    $('#ma-cbx').click(function () {
-      $('.manage-app-cont').toggle('fast', 'swing');
-    });
-    $('#aa-cbx').click(function () {
-      $('.add-app-cont').toggle('fast', 'swing', GetMobileActionApps);
-    });
-    $('#ck-cbx').click(function () {
-      $('.rec-table-cont').toggle('fast', 'swing');
-    });
-
-    $('a.nav-link').click(openSidebar);
-  });
-</script>
+<?!= include('main-js'); ?>
+<?!= include('feedback-msg-js'); ?>
+<?!= script ?>
 
 </html>

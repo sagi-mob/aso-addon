@@ -1,0 +1,36 @@
+<script>
+  $(function () {
+    $('#multiplyBtn').click(multiply);
+  });
+
+  function multiply() {
+    var mults = $('textarea[name=formulas]').val().split(/[\,|\n|\s]+/gm);
+    var file = $('input[name=file]')[0].checked;
+    var sheet = $('input[name=sheet]')[0].checked;
+    google.script.run
+      .withSuccessHandler(function (response, el) {
+        if (file) {
+          var country = $("input[name=country]").val();
+          var filename = country !== "" ? response.name + "-" + country : response.name;
+          download(filename, response.text);
+        }
+        printSuccess("Done", el);
+      })
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .multiplication(mults, file, sheet);
+  }
+
+  function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+</script>

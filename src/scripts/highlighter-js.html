@@ -1,0 +1,15 @@
+<script>
+  $(function () {
+    $('#hightlighBtn').click(highlight);
+  });
+
+  function highlight() {
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .highlighter($('textarea[name=ranges]').val().split(/[\,|\n|\s]+/gm), $('input[type=checkbox]').prop(
+        'checked'));
+  }
+</script>

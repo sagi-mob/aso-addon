@@ -1,59 +1,22 @@
-<fieldset>
-  <legend>OS:</legend>
-  <input class="" id="ios" type="radio" name="os" value="ios" checked="checked" />
-  <label for="ios">iOS</label>
-  <input class="" id="android" type="radio" name="os" value="android" />
-  <label for="android">Android</label>
-</fieldset>
-
-<fieldset>
-  <legend>Country Code:</legend>
-  <input class="form-control" type="text" name="country" placeholder="Type Country Code Here" />
-</fieldset>
-
-<div class="horizontal-toggle">
+<!-- <div class="horizontal-toggle">
   <span class="checkbox-label">Manage Apps</span>
   <span class="toggle-icon">
     <input type="checkbox" id="ma-cbx" style="display:none" />
     <label for="ma-cbx" class="toggle"><span></span></label>
   </span>
-</div>
+</div> -->
 
-<div class="manage-app-cont">
+<div class="manage-app-cont container">
   <fieldset>
     <legend>
       Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="GetDocumentApps()"></i>
     </legend>
     <select id="chosenDocApp"></select>
 
-    <legend for="date">Date:</legend>
-    <input class="form-control" type="date" name="date" id="date" />
-
     <div class="block ma-buttons" id="button-bar">
       <button class="btn btn-default" id="loadAppsKeywords">Refresh</button>
       <button class="btn btn-default red-btn" id="delete-app">Delete App</button>
       <button class="btn btn-default green-btn" id="add-to-tracker">Report sent</button>
-    </div>
-  </fieldset>
-</div>
-
-<div class="horizontal-toggle">
-  <span class="checkbox-label">Add App</span>
-  <span class="toggle-icon">
-    <input type="checkbox" id="aa-cbx" style="display:none" />
-    <label for="aa-cbx" class="toggle"><span></span></label>
-  </span>
-</div>
-
-<div class="add-app-cont">
-  <fieldset>
-    <legend>
-      Select App:<i id="refresh-suggestions" class="fas fa-sync-alt" onclick="GetMobileActionApps()"></i>
-    </legend>
-    <select id="chosenMmpApp"></select>
-
-    <div class="block ma-buttons" id="button-bar">
-      <button class="btn btn-default" id="add-app">Add App</button>
     </div>
   </fieldset>
 </div>

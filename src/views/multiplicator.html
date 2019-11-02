@@ -1,0 +1,46 @@
+<div class="container">
+  <fieldset>
+    <legend>Formulas:</legend>
+    <textarea class="form-control" rows="4" cols="50" name="formulas" placeholder="Insert formulas..."
+      required></textarea>
+    <label for="country">Country (optional):</label>
+    <input type="text" class="form-control" name="country">
+
+    <input type="checkbox" name="file" value="file">
+    <label for="file">export to file</label>
+    <br>
+    <input type="checkbox" name="sheet" value="sheet">
+    <label for="sheet">write to sheet</label>
+  </fieldset>
+  <div class="block" id="button-bar">
+    <button class="btn btn-default" id="multiplyBtn">Multiply</button>
+  </div>
+
+  <div class="fluid">
+    <h3>Basic Instructions</h3>
+    <ol>
+      <!--
+                <li>You need to have a Sheet called 'Words' that conatains all words to be multiplied.
+                <br>Every column should have a header.
+                <br>The <strong>first column</strong> would actually be <strong>column 'B'</strong>.
+                <br>Example:
+                <img src="https://i.imgur.com/jYtkxu7.png" class="img-fluid" alt="Responsive image">
+                </li>
+                -->
+      <li>Switch to the <strong>sheet with the words</strong> you wish to multiply, before clicking the 'Multiply'
+        button</li>
+      <li>Add formulas based on columns <strong>letters</strong>
+        <br>Such as: <img src="https://i.imgur.com/JtM67C3.png" class="img-fluid" alt="Responsive image">
+        <div class="well well-sm">
+          <h4>IMPORTANT!</h4>
+          Formulas can only have column letters. That means that even for a single word, you should create a new
+          column.
+        </div>
+      </li>
+      <li>
+        If you wish to include a specific column without multiply it with any column, just add its letter to the
+        'Formulas' text area.
+      </li>
+    </ol>
+  </div>
+</div>

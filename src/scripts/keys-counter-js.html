@@ -1,0 +1,13 @@
+<script>
+  $(function () {
+    $('#countBtn').click(count);
+  });
+
+  function count() {
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .wordCounter($('input[name=keysRange]').val(), $('input[name=outputRange]').val());
+  }
+</script>
