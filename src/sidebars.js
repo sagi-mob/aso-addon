@@ -1,26 +1,42 @@
-const configureSidebar = (filename, title, width) => {
-  const sidebar = HtmlService.createTemplateFromFile(filename)
+import { reduce } from 'ramda';
+
+const createView = (view, component) => {
+  const viewsArray = {
+    html: {
+      'manage-app': ['basic-app-settings-view', 'manage-app-view'],
+      'add-app': ['basic-app-settings-view', 'add-app-view'],
+      'rec-table': ['rec-table-view'],
+      multiplicator: ['multiplicator'],
+      'keys-counter': ['keys-counter'],
+      highlighter: ['highlighter']
+    },
+    script: {
+      'manage-app': ['manage-app-js'],
+      'add-app': ['add-app-js'],
+      'rec-table': ['rec-table-js'],
+      multiplicator: ['multiplicator-js'],
+      'keys-counter': ['keys-counter-js'],
+      highlighter: ['highlighter-js']
+    }
+  };
+
+  const html = reduce(
+    (acc, curr) => acc.append(HtmlService.createHtmlOutputFromFile(curr).getContent()),
+    HtmlService.createHtmlOutput(),
+    viewsArray[component][view]
+  );
+  return html.getContent();
+};
+
+const openSidebar = (filename, title, view) => {
+  const template = HtmlService.createTemplateFromFile(filename);
+  template.view = createView(view, 'html');
+  template.script = createView(view, 'script');
+  const sidebar = template
     .evaluate()
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(width || 300)
     .setTitle(title);
   SpreadsheetApp.getUi().showSidebar(sidebar);
 };
 
-const showControlPanel = () => configureSidebar('ControlPanel', 'Control Panel');
-const showMultiplySidebar = () => configureSidebar('multiplySidebar', 'Multiplications');
-const showHightlightSidebar = () => configureSidebar('highlightSidebar', 'Highlighter');
-const showKeysCounterSidebar = () => configureSidebar('keyCounterSidebar', 'Keywords Counter');
-
-export { showControlPanel, showMultiplySidebar, showHightlightSidebar, showKeysCounterSidebar };
-
-// { //T HERE IS AN OPTION TO PASS VARIABLE TO THE TEMPLATE
-//   const template = HtmlService.createTemplateFromFile('ControlPanel');
-//   // template.myVar = 'Sagi'; // <--- This is how
-//   const sidebar = template
-//     .evaluate()
-//     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-//     .setWidth(300)
-//     .setTitle('Control Panel');
-//   SpreadsheetApp.getUi().showSidebar(sidebar);
-// }
+export default openSidebar;

@@ -1,0 +1,22 @@
+<!-- <div class="horizontal-toggle">
+  <span class="checkbox-label">Manage Apps</span>
+  <span class="toggle-icon">
+    <input type="checkbox" id="ma-cbx" style="display:none" />
+    <label for="ma-cbx" class="toggle"><span></span></label>
+  </span>
+</div> -->
+
+<div class="manage-app-cont container">
+  <fieldset>
+    <legend>
+      Select App:<i id="refreshApps" class="fas fa-sync-alt" onclick="GetDocumentApps()"></i>
+    </legend>
+    <select id="chosenDocApp"></select>
+
+    <div class="block ma-buttons" id="button-bar">
+      <button class="btn btn-default" id="loadAppsKeywords">Refresh</button>
+      <button class="btn btn-default red-btn" id="delete-app">Delete App</button>
+      <button class="btn btn-default green-btn" id="add-to-tracker">Report sent</button>
+    </div>
+  </fieldset>
+</div>

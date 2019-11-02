@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <?!= include('header-imports'); ?>
+  <?!= include('main-css'); ?>
+</head>
+<header>
+  <?!= include('navbar-view'); ?>
+</header>
+
+<body>
+
+  <?!= view ?>
+  <div class="feedback-msg">
+    <h5></h5>
+  </div>
+  <img src="https://www.wisesample.com/img/waiting.gif" id="loading-indicator" style="display:none" />
+</body>
+<?!= include('footer-imports'); ?>
+<?!= include ('navbar-js'); ?>
+<?!= include('main-js'); ?>
+<?!= include('feedback-msg-js'); ?>
+<?!= script ?>
+
+</html>

@@ -29,9 +29,6 @@ function specialZip(twoDimArr) {
 }
 
 function setSheets(ss) {
-  const keysSheet = ss.getSheetByName('Words');
-  if (keysSheet == null) throw Error('No Keywords Sheet to generate multiplications');
-
   const multSheet = ss.getSheetByName('Multiplications');
   if (multSheet == null) ss.insertSheet('Multiplications');
 }
@@ -146,9 +143,7 @@ function multiply(mults, keywords) {
 }
 
 function getKeywords(ss) {
-  //  var ss = SpreadsheetApp.getActive();
   const sheet = ss.getActiveSheet();
-  //  var sheet= ss.getSheetByName("Words");
   const lastRow = sheet.getLastRow();
   const lastCol = sheet.getLastColumn();
   const wordsArr = sheet.getSheetValues(1, 1, lastRow, lastCol);
@@ -181,7 +176,7 @@ const multiplication = (mults, toFile, toSheet) => {
     return multToFile(hash, headers);
   }
 
-  return 'Done that.';
+  return 'Done';
 };
 
 export default multiplication;

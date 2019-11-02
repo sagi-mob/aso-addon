@@ -1,0 +1,78 @@
+<script>
+  $(function () {
+    GetDocumentApps();
+    $('#refreshApps').click(GetDocumentApps);
+    $('#delete-app').click(deleteApp);
+    $('#loadAppsKeywords').click(loadAppsKeywords);
+    $('#add-to-tracker').click(addToTracker);
+    $('input[name=os]').click(GetDocumentApps);
+    $('a.nav-link').click(openSidebar);
+  });
+  //--------------- REFERSH APP API FUNCTIONS ----------------//
+  function loadAppsKeywords() {
+    var mmpid = $('#chosenDocApp :selected').val();
+    var country = $('input[name=country]').val();
+    var date = $('input[name=date]').val();
+
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .loadAppsKeywords(mmpid, country, date);
+  }
+
+  function GetDocumentApps() {
+    var os = $('input[type=radio]:checked').val();
+    google.script.run
+      .withSuccessHandler(apps => {
+        buildDropdownList(
+          apps[os].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+        );
+      })
+      .GetDocumentApps();
+  }
+
+  function buildDropdownList(apps) {
+    $('#chosenDocApp option').remove();
+    $.each(apps, function (key, obj) {
+      $('#chosenDocApp').append(
+        $('<option>')
+        .attr('value', obj['mmpid'])
+        .attr('os', obj['os'])
+        .attr('name', obj['name'])
+        .attr('storeid', obj['storeid'])
+        .text(obj['name'])
+      );
+    });
+  }
+
+  //--------------- TRACK APP FUNCTIONS ----------------//
+
+  function addToTracker() {
+    var mmpid = $('#chosenDocApp :selected').val();
+    var country = $('input[name=country]').val();
+
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(printSuccess)
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .addToTracker(mmpid, country);
+  }
+
+  //--------------- DELETE APP FUNCTIONS ----------------//
+
+  function deleteApp() {
+    var mmpid = $('#chosenDocApp :selected').val();
+    this.disabled = true;
+    google.script.run
+      .withSuccessHandler(function (msg, element) {
+        printSuccess(msg, element);
+        GetDocumentApps();
+      })
+      .withFailureHandler(printErr)
+      .withUserObject(this)
+      .deleteApp(mmpid);
+  }
+</script>
