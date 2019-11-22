@@ -1,5 +1,5 @@
 function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  return string.toString().replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 }
 /**
  * For each cell in {searchCol} that contains the cell content, it adds
@@ -79,12 +79,20 @@ function SUMIFREGEX(cell, searchCol, sumCol, criterion) {
 function SUMSCORE(cell, keysRange, scoreRange) {
   if(keysRange.length != scoreRange.length)
     throw Error("Keywords Range and Score range don't match");
+    var escapedCell = escapeRegExp(cell);
+    
   var sum = keysRange.reduce(function(acc, curr, ind){
-    var escapedCurr = escapeRegExp(curr); // function can be found in utils.js
-    if(String(cell).search(new RegExp("\\b" + escapedCurr + "\\b","gim")) !== -1){
+  try{
+  
+  var escapedCurr = escapeRegExp(curr); // function can be found in utils.js
+    if(String(escapedCell).search(new RegExp("\\b" + escapedCurr + "\\b","gim")) !== -1){
       return acc + Number(scoreRange[ind]);
     }
     return acc;
+  } catch (e) {
+      throw Error( "e: " + e.message + "\n" + curr);
+    }
+    
   }, 0);
   return sum;
 }
@@ -146,7 +154,7 @@ function COUNTIFRANGE(keywordsRange, searchRange, criterionRange, criterion) {
     for (var i = 0; i < searchRange.length; i++) {
       var criterionRangeVal = criterionRange ? criterionRange[i] : 0 ;
       var phrase = searchRange[i].toString();
-      var escapedCell = escapeRegExp(cell.toString()); // function can be found in utils.js
+      var escapedCell = escapeRegExp(cell); // function can be found in utils.js
       var found = phrase.search(new RegExp('\\b('+escapedCell+')\\b', 'gim')) != -1;
       counter += checkCriteria(criterionRangeVal) && found ? 1 : 0;
     }
@@ -163,7 +171,7 @@ function COUNTIFRANGE(keywordsRange, searchRange, criterionRange, criterion) {
  */
 function COUNTIFCELL(cell, searchRange) {
     var counter = 0;
-    var escapedCell = escapeRegExp(cell.toString()); // function can be found in utils.js
+    var escapedCell = escapeRegExp(cell); // function can be found in utils.js
     for (var i = 0; i < searchRange.length; i++) {
       var phrase = searchRange[i].toString();
       var found = phrase.search(new RegExp('\\b'+escapedCell+'\\b', 'gim')) != -1;
